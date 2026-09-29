@@ -1,0 +1,22 @@
+{"providers": [
+  {"type": "bitmap", "file": "qtiers:mctiers/axe.png", "ascent": 8, "height": 8, "chars": ["\uE901"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/mace.png", "ascent": 8, "height": 8, "chars": ["\uE902"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/nethop.png", "ascent": 8, "height": 8, "chars": ["\uE903"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/pot.png", "ascent": 8, "height": 8, "chars": ["\uE904"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/smp.png", "ascent": 8, "height": 8, "chars": ["\uE905"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/sword.png", "ascent": 8, "height": 8, "chars": ["\uE906"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/uhc.png", "ascent": 8, "height": 8, "chars": ["\uE907"]},
+  {"type": "bitmap", "file": "qtiers:mctiers/vanilla.png", "ascent": 8, "height": 8, "chars": ["\uE908"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/bed.png", "ascent": 8, "height": 8, "chars": ["\uE909"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/bow.png", "ascent": 8, "height": 8, "chars": ["\uE90A"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/creeper.png", "ascent": 8, "height": 8, "chars": ["\uE90B"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/debuff.png", "ascent": 8, "height": 8, "chars": ["\uE90C"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/dia_crystal.png", "ascent": 8, "height": 8, "chars": ["\uE90D"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/dia_smp.png", "ascent": 8, "height": 8, "chars": ["\uE90E"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/elytra.png", "ascent": 8, "height": 8, "chars": ["\uE90F"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/manhunt.png", "ascent": 8, "height": 8, "chars": ["\uE910"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/minecart.png", "ascent": 8, "height": 8, "chars": ["\uE911"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/og_vanilla.png", "ascent": 8, "height": 8, "chars": ["\uE912"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/speed.png", "ascent": 8, "height": 8, "chars": ["\uE913"]},
+  {"type": "bitmap", "file": "qtiers:subtiers/trident.png", "ascent": 8, "height": 8, "chars": ["\uE914"]}
+]}

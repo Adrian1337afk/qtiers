@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "qtiers",
+  "version": "${version}",
+  "name": "QTiers",
+  "description": "Shows MCTiers, PvPTiers and SubTiers rankings next to player names in nametags and the tab list.",
+  "authors": ["adrian"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.qtiers.QTiers"]
+  },
+  "mixins": ["qtiers.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
