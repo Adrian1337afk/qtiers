@@ -1,3 +1,5 @@
+<img src="src/main/resources/assets/qtiers/icon.png" width="96" align="right" alt="QTiers logo">
+
 # QTiers
 
 A Fabric client mod for **Minecraft 1.21.11**. It shows **MCTiers**, **PvPTiers** and **SubTiers** rankings together next to player names. It works like TierTagger, but for all three sites at once.
