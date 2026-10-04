@@ -1,12 +1,14 @@
 package dev.qtiers;
 
 import dev.qtiers.QTiersConfig.HighestMode;
+import dev.qtiers.QTiersConfig.IconStyle;
 import dev.qtiers.QTiersConfig.Position;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +22,11 @@ public class QTiersConfigScreen extends Screen {
     private static final int BUTTON_W = 150;
     private static final int BUTTON_H = 20;
     private static final int GAP = 4;
+    // Full layout needs ~270px; shorter windows (e.g. GUI scale 2 on 480p) use tight spacing
+    private static final int FULL_LAYOUT_HEIGHT = 272;
+
+    private int rowGap = GAP;
+    private boolean compact;
 
     private final @Nullable Screen parent;
 
@@ -33,7 +40,10 @@ public class QTiersConfigScreen extends Screen {
         QTiersConfig config = QTiersConfig.get();
         int left = width / 2 - BUTTON_W - GAP / 2;
         int right = width / 2 + GAP / 2;
-        int y = 40;
+        compact = height < FULL_LAYOUT_HEIGHT;
+        rowGap = compact ? 1 : GAP;
+        int sectionGap = compact ? 2 : 8;
+        int y = compact ? 28 : 40;
 
         // One row per site: position | gamemode
         for (TierSource source : TierSource.values()) {
@@ -52,17 +62,23 @@ public class QTiersConfigScreen extends Screen {
                         site.gamemode = v;
                         QTiersConfig.save();
                     }));
-            y += BUTTON_H + GAP;
+            y += BUTTON_H + rowGap;
         }
 
-        y += 8;
+        y += sectionGap;
         addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersConfigScreen::highestText, config.highestMode)
                 .values(Arrays.asList(HighestMode.values()))
-                .build(left, y, BUTTON_W * 2 + GAP, BUTTON_H, Text.literal("Show highest tier"), (b, v) -> {
+                .build(left, y, BUTTON_W, BUTTON_H, Text.literal("Highest"), (b, v) -> {
                     config.highestMode = v;
                     QTiersConfig.save();
                 }));
-        y += BUTTON_H + GAP;
+        addDrawableChild(CyclingButtonWidget.<IconStyle>builder(QTiersConfigScreen::iconStyleText, config.iconStyle)
+                .values(Arrays.asList(IconStyle.values()))
+                .build(right, y, BUTTON_W, BUTTON_H, Text.literal("Icons"), (b, v) -> {
+                    config.iconStyle = v;
+                    QTiersConfig.save();
+                }));
+        y += BUTTON_H + rowGap;
 
         y = toggle(left, y, "Enabled", config.enabled, v -> config.enabled = v, false);
         y = toggle(right, y, "Gamemode icons", config.showIcons, v -> config.showIcons = v, true);
@@ -73,7 +89,7 @@ public class QTiersConfigScreen extends Screen {
         y = toggle(left, y, "Show retired", config.showRetired, v -> config.showRetired = v, false);
         addDrawableChild(ButtonWidget.builder(Text.literal("Refresh tiers"), b -> TierApi.clearCache())
                 .dimensions(right, y, BUTTON_W, BUTTON_H).build());
-        y += BUTTON_H + GAP + 8;
+        y += BUTTON_H + rowGap + sectionGap;
 
         addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
                 .dimensions(width / 2 - 100, Math.min(y, height - 28), 200, BUTTON_H).build());
@@ -86,7 +102,7 @@ public class QTiersConfigScreen extends Screen {
                     setter.accept(v);
                     QTiersConfig.save();
                 }));
-        return endsRow ? y + BUTTON_H + GAP : y;
+        return endsRow ? y + BUTTON_H + rowGap : y;
     }
 
     private static Text positionText(Position p) {
@@ -100,17 +116,24 @@ public class QTiersConfigScreen extends Screen {
     private static Text highestText(HighestMode m) {
         return switch (m) {
             case NEVER -> Text.literal("Never");
-            case NOT_FOUND -> Text.literal("If not ranked in mode");
+            case NOT_FOUND -> Text.literal("If unranked");
             case ALWAYS -> Text.literal("Always");
         };
+    }
+
+    /** Style name followed by a few sample icons drawn in that style. */
+    private static Text iconStyleText(IconStyle style) {
+        MutableText text = Text.literal(style.displayName + " ");
+        for (String mode : new String[]{"sword", "pot", "uhc"}) text.append(GameModes.icon(mode, style));
+        return text;
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
-        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, 15, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, compact ? 6 : 15, 0xFFFFFFFF);
         context.drawCenteredTextWithShadow(textRenderer,
-                Text.literal("Site position  ·  gamemode shown").formatted(Formatting.GRAY), width / 2, 27, 0xFFFFFFFF);
+                Text.literal("Site position  ·  gamemode shown").formatted(Formatting.GRAY), width / 2, compact ? 16 : 27, 0xFFFFFFFF);
     }
 
     @Override

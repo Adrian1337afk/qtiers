@@ -1,14 +1,16 @@
 package dev.qtiers;
 
 import net.minecraft.text.MutableText;
+import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Gamemode keys used by each site, with icons (glyphs in assets/minecraft/font/default.json,
- * original textures drawn by tools/Icons.java) and a text color per mode.
+ * Gamemode keys used by each site, with icon glyphs (one font per icon style in assets/qtiers/font/,
+ * all sharing the same codepoints) and a text color per mode.
  */
 public final class GameModes {
     /** Special gamemode value meaning "show this player's highest tier on the site". */
@@ -68,14 +70,23 @@ public final class GameModes {
         return modes.get((i + 1) % modes.size());
     }
 
+    /** The gamemode's icon in the configured icon style. */
     public static Text icon(String id) {
-        return Text.literal(String.valueOf(get(id).icon())).styled(s -> s.withColor(0xFFFFFF));
+        return icon(id, QTiersConfig.get().iconStyle);
+    }
+
+    public static Text icon(String id, QTiersConfig.IconStyle style) {
+        Mode mode = get(id);
+        if (mode.icon() == '•') return Text.literal("•");
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.of(QTiers.MOD_ID, style.fontName));
+        return Text.literal(String.valueOf(mode.icon())).styled(s -> s.withColor(0xFFFFFF).withFont(font));
     }
 
     /** Icon + title in the mode's color, e.g. for chat messages and buttons. */
     public static MutableText styledName(String id) {
         if (HIGHEST.equals(id)) return Text.literal("Highest").styled(s -> s.withColor(0xFFD166));
         Mode mode = get(id);
-        return Text.literal(mode.icon() + " ").append(Text.literal(mode.title()).styled(s -> s.withColor(mode.color())));
+        return Text.empty().append(icon(id)).append(" ")
+                .append(Text.literal(mode.title()).styled(s -> s.withColor(mode.color())));
     }
 }

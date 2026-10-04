@@ -13,6 +13,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -70,7 +71,7 @@ public class QTiersProfileScreen extends Screen {
             }
             profiles = result;
             if (displayName.equals(query)) {
-                result.values().stream().flatMap(Optional::stream).map(TierProfile::name)
+                result.values().stream().filter(java.util.Objects::nonNull).flatMap(Optional::stream).map(TierProfile::name)
                         .filter(n -> !n.isBlank()).findFirst().ifPresent(n -> displayName = n);
             }
         }));
@@ -141,7 +142,7 @@ public class QTiersProfileScreen extends Screen {
             return;
         }
         for (TierSource source : TierSource.values()) {
-            renderColumn(context, source, profiles.getOrDefault(source, Optional.empty()), colX, top, colW);
+            renderColumn(context, source, profiles.get(source), colX, top, colW);
             colX += colW;
         }
     }
@@ -163,25 +164,32 @@ public class QTiersProfileScreen extends Screen {
         }
     }
 
-    private void renderColumn(DrawContext context, TierSource source, Optional<TierProfile> profile, int x, int y, int w) {
+    /** {@code profile} is null when the site couldn't be reached (see TierApi.lookupAll). */
+    private void renderColumn(DrawContext context, TierSource source, @Nullable Optional<TierProfile> profile, int x, int y, int w) {
         context.fill(x + 2, y - 2, x + w - 2, y + 22, 0x40000000 | (source.color & 0xFFFFFF));
         context.drawTextWithShadow(textRenderer,
                 Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), x + 6, y + 1, 0xFFFFFFFF);
 
+        if (profile == null) {
+            context.drawTextWithShadow(textRenderer, Text.literal("Couldn't load"), x + 6, y + 12, 0xFFFF7777);
+            return;
+        }
         if (profile.isEmpty() || !profile.get().isRanked()) {
             context.drawTextWithShadow(textRenderer, Text.literal("Not ranked"), x + 6, y + 12, 0xFF888888);
             return;
         }
         TierProfile p = profile.get();
         String region = p.region().isBlank() || p.region().equals("??") ? "" : " · " + p.region();
-        context.drawTextWithShadow(textRenderer,
-                Text.literal("#" + p.overall() + " · " + p.points() + " pts" + region), x + 6, y + 12, 0xFFAAAAAA);
+        String stats = "#" + p.overall() + " · " + p.points() + " pts";
+        // Region is the least important part; drop it rather than run into the next column
+        if (textRenderer.getWidth(stats + region) <= w - 10) stats += region;
+        context.drawTextWithShadow(textRenderer, Text.literal(stats), x + 6, y + 12, 0xFFAAAAAA);
 
         int rowY = y + 28;
         List<Ranking> rankings = p.rankings().values().stream().sorted(Comparator.comparingInt(Ranking::score)).toList();
         for (Ranking r : rankings) {
             GameModes.Mode mode = GameModes.get(r.mode());
-            MutableText line = Text.literal(mode.icon() + " ")
+            MutableText line = Text.empty().append(GameModes.icon(r.mode())).append(" ")
                     .append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
                     .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(0xD0D0D0)));
             if (r.hasHigherPeak()) {
