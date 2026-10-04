@@ -185,9 +185,12 @@ public class QTiersProfileScreen extends Screen {
                     .append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
                     .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(0xD0D0D0)));
             if (r.hasHigherPeak()) {
-                line.append(Text.literal(" ↑").formatted(Formatting.DARK_GRAY))
+                MutableText withPeak = line.copy()
+                        .append(Text.literal(" ↑").formatted(Formatting.DARK_GRAY))
                         .append(Text.literal(Ranking.tierLabel(r.peakTier(), r.peakPos()))
                                 .styled(s -> s.withColor(Ranking.tierColor(r.peakTier(), r.peakPos()))));
+                // Drop the peak rather than overlap the next column on narrow screens
+                if (textRenderer.getWidth(withPeak) <= w - 10) line = withPeak;
             }
             context.drawTextWithShadow(textRenderer, line, x + 6, rowY, 0xFFFFFFFF);
             rowY += ROW_H;
