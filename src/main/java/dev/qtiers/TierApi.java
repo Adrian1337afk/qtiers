@@ -38,6 +38,9 @@ public final class TierApi {
 
     private static final Map<UUID, Map<TierSource, Entry>> CACHE = new ConcurrentHashMap<>();
 
+    private static final java.util.function.BiConsumer<TierSource, Throwable> LOGGER_FAILED =
+            (source, e) -> QTiers.LOGGER.warn("Could not load {} profile: {}", source.displayName, e.toString());
+
     private TierApi() {}
 
     /**
@@ -61,12 +64,19 @@ public final class TierApi {
         return entry.profile();
     }
 
-    /** Fetches every site for a player name (used by the /tiers command). */
+    /**
+     * Fetches every site for a player name (profile screen). Each site is retried once; a site that
+     * still fails maps to {@code null}, so callers can tell "couldn't load" apart from "not ranked".
+     */
     public static CompletableFuture<Map<TierSource, Optional<TierProfile>>> lookupAll(String playerName) {
         String encoded = URLEncoder.encode(playerName, StandardCharsets.UTF_8);
         Map<TierSource, CompletableFuture<Optional<TierProfile>>> futures = new EnumMap<>(TierSource.class);
         for (TierSource source : TierSource.values()) {
-            futures.put(source, fetch(source.urlFor(encoded)).exceptionally(e -> Optional.empty()));
+            String url = source.urlFor(encoded);
+            futures.put(source, fetch(url).exceptionallyCompose(e -> fetch(url)).exceptionally(e -> {
+                LOGGER_FAILED.accept(source, e);
+                return null;
+            }));
         }
         return CompletableFuture.allOf(futures.values().toArray(CompletableFuture[]::new)).thenApply(v -> {
             Map<TierSource, Optional<TierProfile>> out = new EnumMap<>(TierSource.class);

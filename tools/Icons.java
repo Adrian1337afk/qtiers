@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * Original QTiers gamemode icons. Drawn in a 32x32 coordinate space at 4x resolution,
  * given a 1px dark outline, then box-downscaled to 32x32.
- * Usage: java Icons.java <outDir>
+ * Usage: java tools/Icons.java src/main/resources/assets/qtiers/textures/icons/qtiers
  */
 public class Icons {
     static final int S = 4;          // supersampling factor
@@ -20,26 +20,26 @@ public class Icons {
     public static void main(String[] args) throws Exception {
         File out = new File(args[0]);
         Map<String, Runnable> icons = new LinkedHashMap<>();
-        icons.put("mctiers/axe", Icons::axe);
-        icons.put("mctiers/mace", Icons::mace);
-        icons.put("mctiers/nethop", Icons::nethop);
-        icons.put("mctiers/pot", Icons::pot);
-        icons.put("mctiers/smp", Icons::smp);
-        icons.put("mctiers/sword", Icons::sword);
-        icons.put("mctiers/uhc", Icons::uhc);
-        icons.put("mctiers/vanilla", Icons::vanilla);
-        icons.put("subtiers/bed", Icons::bed);
-        icons.put("subtiers/bow", Icons::bow);
-        icons.put("subtiers/creeper", Icons::creeper);
-        icons.put("subtiers/debuff", Icons::debuff);
-        icons.put("subtiers/dia_crystal", Icons::diaCrystal);
-        icons.put("subtiers/dia_smp", Icons::diaSmp);
-        icons.put("subtiers/elytra", Icons::elytra);
-        icons.put("subtiers/manhunt", Icons::manhunt);
-        icons.put("subtiers/minecart", Icons::minecart);
-        icons.put("subtiers/og_vanilla", Icons::ogVanilla);
-        icons.put("subtiers/speed", Icons::speed);
-        icons.put("subtiers/trident", Icons::trident);
+        icons.put("axe", Icons::axe);
+        icons.put("mace", Icons::mace);
+        icons.put("nethop", Icons::nethop);
+        icons.put("pot", Icons::pot);
+        icons.put("smp", Icons::smp);
+        icons.put("sword", Icons::sword);
+        icons.put("uhc", Icons::uhc);
+        icons.put("vanilla", Icons::vanilla);
+        icons.put("bed", Icons::bed);
+        icons.put("bow", Icons::bow);
+        icons.put("creeper", Icons::creeper);
+        icons.put("debuff", Icons::debuff);
+        icons.put("dia_crystal", Icons::diaCrystal);
+        icons.put("dia_smp", Icons::diaSmp);
+        icons.put("elytra", Icons::elytra);
+        icons.put("manhunt", Icons::manhunt);
+        icons.put("minecart", Icons::minecart);
+        icons.put("og_vanilla", Icons::ogVanilla);
+        icons.put("speed", Icons::speed);
+        icons.put("trident", Icons::trident);
 
         for (Map.Entry<String, Runnable> e : icons.entrySet()) {
             BufferedImage art = new BufferedImage(N, N, BufferedImage.TYPE_INT_ARGB);
