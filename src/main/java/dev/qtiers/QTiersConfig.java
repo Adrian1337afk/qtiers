@@ -19,7 +19,6 @@ public final class QTiersConfig {
 
     /** Gamemode icon sets; each is a font in assets/qtiers/font/<fontName>.json. */
     public enum IconStyle {
-        QTIERS("qtiers", "QTiers"),
         MCTIERS("mctiers", "MCTiers"),
         PVPTIERS("pvptiers", "PvPTiers"),
         MCPVP("mcpvp", "mcpvp.club");
@@ -51,7 +50,7 @@ public final class QTiersConfig {
     public boolean showInNametags = true;
     public boolean showInTabList = true;
     public boolean showIcons = true;
-    public IconStyle iconStyle = IconStyle.QTIERS;
+    public IconStyle iconStyle = IconStyle.MCTIERS;
     /** Adds a small site tag (MC / PVP / SUB) in front of each tier. */
     public boolean showSiteLabel = false;
     /** Separator next to the name takes the tier's color instead of gray (like Tiers' dynamic separator). */
@@ -93,7 +92,7 @@ public final class QTiersConfig {
     /** Fills anything missing or invalid after loading an older/hand-edited file. */
     private void repair() {
         if (highestMode == null) highestMode = HighestMode.NOT_FOUND;
-        if (iconStyle == null) iconStyle = IconStyle.QTIERS;
+        if (iconStyle == null) iconStyle = IconStyle.MCTIERS; // also old configs set to the removed QTiers style
         Map<TierSource, SiteSettings> defaults = defaultSites();
         Map<TierSource, SiteSettings> fixed = new EnumMap<>(TierSource.class);
         for (TierSource source : TierSource.values()) {
