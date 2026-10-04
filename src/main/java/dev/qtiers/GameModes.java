@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * Gamemode keys used by each site, with icons (glyphs in assets/minecraft/font/default.json,
- * textures from TierTagger) and TierTagger's per-mode colors.
+ * original textures drawn by tools/Icons.java) and a text color per mode.
  */
 public final class GameModes {
     /** Special gamemode value meaning "show this player's highest tier on the site". */
