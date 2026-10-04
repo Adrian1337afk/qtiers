@@ -35,7 +35,7 @@ A Fabric client mod for **Minecraft 1.21.11**. It shows **MCTiers**, **PvPTiers*
 | Open settings | unbound |
 
 ## Install
-Put `qtiers-1.0.0.jar` and **Fabric API** in `.minecraft/mods`. You need Fabric Loader 0.16 or newer.
+Put `qtiers-1.0.1.jar` and **Fabric API** in `.minecraft/mods`. You need Fabric Loader 0.16 or newer.
 
 ## Build
 ```
