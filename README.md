@@ -33,7 +33,7 @@ PvPTiers        SubTiers
 | Open settings | unbound |
 
 ## Install
-Put `qtiers-1.1.0.jar` and **Fabric API** in `.minecraft/mods`. You need Fabric Loader 0.16 or newer.
+Put `qtiers-1.2.0.jar` and **Fabric API** in `.minecraft/mods`. You need Fabric Loader 0.16 or newer.
 
 ## Build
 ```
