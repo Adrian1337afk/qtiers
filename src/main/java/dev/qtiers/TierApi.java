@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** Fetches and caches profiles from all three sites. Never blocks the render thread. */
+/** Fetches and caches profiles from every tier-list site. Never blocks the render thread. */
 public final class TierApi {
     private static final long TTL_MS = Duration.ofMinutes(10).toMillis();
     private static final long ERROR_TTL_MS = Duration.ofMinutes(1).toMillis();

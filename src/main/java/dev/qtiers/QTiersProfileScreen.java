@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** /qtiers <player>: full-body skin render plus every tier from all three sites. */
+/** /qtiers <player>: full-body skin render plus every tier from each site. */
 public class QTiersProfileScreen extends Screen {
     /**
      * Full-body renders, tried in order (same services the Tiers mod uses). Visage goes first:
