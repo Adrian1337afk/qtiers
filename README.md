@@ -2,18 +2,18 @@
 
 # QTiers
 
-A Fabric client mod for **Minecraft 1.21.11**. It shows **MCTiers**, **PvPTiers** and **SubTiers** rankings together next to player names. It works like TierTagger, but for all three sites at once.
+A Fabric client mod for **Minecraft 1.21.11**. It shows **PvPTiers** and **SubTiers** rankings together next to player names. It works like TierTagger, but for both sites at once.
 
 ```
-⚔HT3 | Steve | 🔮LT2 ⛏HT4
- MCTiers        PvPTiers SubTiers
+⚔HT3 | Steve | ⛏HT4
+PvPTiers        SubTiers
 ```
 
 ![Profile screen](profile-screen.png)
 
 ## Features
-- **All 3 sites at once** in nametags and the tab list. Put each site on the **left** or **right** of the name, or turn it **off**.
-- **Player profile screen** (`/qtiers <player>`): a full-body skin render, plus every tier, peak, points, rank and region from all 3 sites. It has a button to open the player's NameMC page.
+- **Both sites at once** in nametags and the tab list. Put each site on the **left** or **right** of the name, or turn it **off**.
+- **Player profile screen** (`/qtiers <player>`): a full-body skin render, plus every tier, peak, points, rank and region from both sites. It has a button to open the player's NameMC page.
 - **A separate gamemode for each site**, or **Highest**. Fallback rules match TierTagger: *Never*, *If not ranked in mode*, or *Always*.
 - **3 icon styles**, switchable in settings: **MCTiers** (default), **PvPTiers** and **mcpvp.club** (classic). Plus **MCTiers' tier colors** (HT1 gold, HT2 silver, HT3 bronze, and so on). Retired tiers show as `RHT1` in light blue.
 - **Open the nearest player's profile** with **H**.
@@ -28,7 +28,7 @@ A Fabric client mod for **Minecraft 1.21.11**. It shows **MCTiers**, **PvPTiers*
 | Action | Default |
 |---|---|
 | Open nearest player's tiers | H |
-| Cycle MCTiers / PvPTiers / SubTiers gamemode | unbound |
+| Cycle PvPTiers / SubTiers gamemode | unbound |
 | Toggle QTiers | unbound |
 | Open settings | unbound |
 

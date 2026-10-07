@@ -2,11 +2,8 @@ package dev.qtiers;
 
 import java.util.UUID;
 
-/** The three tier-list websites and how to reach their public APIs. */
+/** The tier-list websites and how to reach their public APIs. */
 public enum TierSource {
-    MCTIERS("MCTiers", "MC", 0x5DADEC,
-            "https://mctiers.com/api/v2/profile/%s",
-            "https://mctiers.com/api/v2/profile/by-name/%s"),
     PVPTIERS("PvPTiers", "PVP", 0xE0544E,
             "https://pvptiers.com/api/profile/%s",
             "https://pvptiers.com/api/search_profile/%s"),

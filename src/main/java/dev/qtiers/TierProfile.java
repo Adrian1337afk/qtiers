@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/** A player's rankings on one tier-list site. All three sites share this JSON schema. */
+/** A player's rankings on one tier-list site. Every supported site uses this JSON schema. */
 public record TierProfile(String name, String region, int points, int overall, Map<String, Ranking> rankings) {
 
     public static final TierProfile EMPTY = new TierProfile("", "", 0, 0, Map.of());

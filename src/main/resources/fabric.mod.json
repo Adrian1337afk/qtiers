@@ -3,7 +3,7 @@
   "id": "qtiers",
   "version": "${version}",
   "name": "QTiers",
-  "description": "Shows MCTiers, PvPTiers and SubTiers rankings next to player names in nametags and the tab list.",
+  "description": "Shows PvPTiers and SubTiers rankings next to player names in nametags and the tab list.",
   "authors": ["qdran"],
   "contact": {
     "homepage": "https://qdran.de"
