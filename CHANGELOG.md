@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 (2026-10-08)
 
 ### Added
 - **MCPVP** tiers (mcpvp.com), including its 16 kits such as Shield, Early Game, Late Game, End Game and Spear, plus each player's overall tier and points. MCPVP has no public API, so QTiers reads its public profile pages.
