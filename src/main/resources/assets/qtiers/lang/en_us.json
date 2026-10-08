@@ -2,6 +2,8 @@
   "key.category.qtiers.main": "QTiers",
   "key.qtiers.cycle_pvptiers": "Cycle PvPTiers gamemode",
   "key.qtiers.cycle_subtiers": "Cycle SubTiers gamemode",
+  "key.qtiers.cycle_mcpvp": "Cycle MCPVP gamemode",
+  "key.qtiers.cycle_pvphq": "Cycle PVPHQ gamemode",
   "key.qtiers.toggle": "Toggle QTiers",
   "key.qtiers.nearest": "Open nearest player's tiers",
   "key.qtiers.config": "Open QTiers settings"

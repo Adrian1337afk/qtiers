@@ -64,6 +64,8 @@ public final class QTiersConfig {
         Map<TierSource, SiteSettings> map = new EnumMap<>(TierSource.class);
         map.put(TierSource.PVPTIERS, new SiteSettings(Position.LEFT));
         map.put(TierSource.SUBTIERS, new SiteSettings(Position.RIGHT));
+        map.put(TierSource.MCPVP, new SiteSettings(Position.RIGHT));
+        map.put(TierSource.PVPHQ, new SiteSettings(Position.RIGHT));
         return map;
     }
 

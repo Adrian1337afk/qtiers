@@ -31,6 +31,7 @@ public final class TierApi {
     });
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(8))
+            .followRedirects(HttpClient.Redirect.NORMAL) // mcpvp.com profiles redirect
             .executor(EXECUTOR)
             .build();
 
@@ -54,7 +55,7 @@ public final class TierApi {
         if (entry == null || (!entry.loading() && now > entry.expiresAt())) {
             Optional<TierProfile> stale = entry == null ? Optional.empty() : entry.profile();
             perSource.put(source, new Entry(stale, Long.MAX_VALUE, true));
-            fetch(source.urlFor(uuid)).whenComplete((result, err) -> {
+            fetch(source, source.urlFor(uuid)).whenComplete((result, err) -> {
                 boolean failed = err != null;
                 Optional<TierProfile> value = failed ? stale : result;
                 perSource.put(source, new Entry(value, System.currentTimeMillis() + (failed ? ERROR_TTL_MS : TTL_MS), false));
@@ -65,24 +66,20 @@ public final class TierApi {
     }
 
     /**
-     * Fetches every site for a player name (profile screen). Each site is retried once; a site that
-     * still fails maps to {@code null}, so callers can tell "couldn't load" apart from "not ranked".
+     * Starts a lookup on every site for a player name (profile screen), one future per site so each
+     * can be shown as soon as it arrives. Each site is retried once; a site that still fails completes
+     * exceptionally, so callers can tell "couldn't load" apart from "not ranked" (empty).
      */
-    public static CompletableFuture<Map<TierSource, Optional<TierProfile>>> lookupAll(String playerName) {
+    public static Map<TierSource, CompletableFuture<Optional<TierProfile>>> lookupEach(String playerName) {
         String encoded = URLEncoder.encode(playerName, StandardCharsets.UTF_8);
         Map<TierSource, CompletableFuture<Optional<TierProfile>>> futures = new EnumMap<>(TierSource.class);
         for (TierSource source : TierSource.values()) {
             String url = source.urlFor(encoded);
-            futures.put(source, fetch(url).exceptionallyCompose(e -> fetch(url)).exceptionally(e -> {
-                LOGGER_FAILED.accept(source, e);
-                return null;
+            futures.put(source, fetch(source, url).exceptionallyCompose(e -> fetch(source, url)).whenComplete((r, e) -> {
+                if (e != null) LOGGER_FAILED.accept(source, e);
             }));
         }
-        return CompletableFuture.allOf(futures.values().toArray(CompletableFuture[]::new)).thenApply(v -> {
-            Map<TierSource, Optional<TierProfile>> out = new EnumMap<>(TierSource.class);
-            futures.forEach((s, f) -> out.put(s, f.join()));
-            return out;
-        });
+        return futures;
     }
 
     public static void clearCache() {
@@ -115,22 +112,15 @@ public final class TierApi {
                 .build();
     }
 
-    /** 404 → Optional.empty() (player not listed). Other failures complete exceptionally. */
-    private static CompletableFuture<Optional<TierProfile>> fetch(String url) {
+    /** Fetches and parses one site's profile. Empty = player not listed; other failures complete exceptionally. */
+    private static CompletableFuture<Optional<TierProfile>> fetch(TierSource source, String url) {
         HttpRequest request = HttpRequest.newBuilder(URI.create(url))
                 .timeout(Duration.ofSeconds(10))
                 .header("User-Agent", "QTiers-Fabric-Mod/1.0")
-                .header("Accept", "application/json")
+                .header("Accept", source == TierSource.MCPVP ? "text/html" : "application/json")
                 .GET()
                 .build();
-        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(response -> {
-            if (response.statusCode() == 404) return Optional.<TierProfile>empty();
-            if (response.statusCode() != 200) {
-                throw new IllegalStateException("HTTP " + response.statusCode() + " from " + url);
-            }
-            JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
-            if (json.has("error")) return Optional.<TierProfile>empty();
-            return Optional.of(TierProfile.parse(json));
-        });
+        return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> source.parser.parse(response.statusCode(), response.uri(), response.body()));
     }
 }

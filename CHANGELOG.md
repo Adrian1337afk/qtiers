@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- **MCPVP** tiers (mcpvp.com), including its 16 kits such as Shield, Early Game, Late Game, End Game and Spear, plus each player's overall tier and points. MCPVP has no public API, so QTiers reads its public profile pages.
+- **PVPHQ** tiers (pvphq.com), from its official API. Inactive PVPHQ tiers are shown like retired tiers (R prefix).
+- Keybinds to cycle the MCPVP and PVPHQ gamemodes.
+
+### Changed
+- **Tier colors now come from MCPVP**, and tiers now go from 1 to 6 with High, Mid and Low positions (e.g. MT3). Icons are unchanged.
+- The profile screen shows the sites in a 2×2 grid, and each site's panel appears as soon as that site answers. If a panel has more tiers than fit, it ends with "+N more".
+- The settings screen fits all four sites on small windows.
+
 ## 1.2.0 (2026-10-08)
 
 ### Removed

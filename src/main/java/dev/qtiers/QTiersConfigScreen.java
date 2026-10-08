@@ -22,8 +22,8 @@ public class QTiersConfigScreen extends Screen {
     private static final int BUTTON_W = 150;
     private static final int BUTTON_H = 20;
     private static final int GAP = 4;
-    // Full layout needs ~270px; shorter windows (e.g. GUI scale 2 on 480p) use tight spacing
-    private static final int FULL_LAYOUT_HEIGHT = 272;
+    // Full layout needs ~292px; shorter windows (e.g. GUI scale 2 on 480p) use tight spacing and no subtitle
+    private static final int FULL_LAYOUT_HEIGHT = 296;
 
     private int rowGap = GAP;
     private boolean compact;
@@ -42,8 +42,8 @@ public class QTiersConfigScreen extends Screen {
         int right = width / 2 + GAP / 2;
         compact = height < FULL_LAYOUT_HEIGHT;
         rowGap = compact ? 1 : GAP;
-        int sectionGap = compact ? 2 : 8;
-        int y = compact ? 28 : 40;
+        int sectionGap = compact ? 1 : 8;
+        int y = compact ? 17 : 40;
 
         // One row per site: position | gamemode
         for (TierSource source : TierSource.values()) {
@@ -131,9 +131,11 @@ public class QTiersConfigScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
-        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, compact ? 6 : 15, 0xFFFFFFFF);
-        context.drawCenteredTextWithShadow(textRenderer,
-                Text.literal("Site position  ·  gamemode shown").formatted(Formatting.GRAY), width / 2, compact ? 16 : 27, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, compact ? 5 : 15, 0xFFFFFFFF);
+        if (!compact) {
+            context.drawCenteredTextWithShadow(textRenderer,
+                    Text.literal("Site position  ·  gamemode shown").formatted(Formatting.GRAY), width / 2, 27, 0xFFFFFFFF);
+        }
     }
 
     @Override
