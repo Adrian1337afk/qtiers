@@ -13,12 +13,13 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** /qtiers <player>: full-body skin render plus every tier from each site. */
@@ -40,8 +41,9 @@ public class QTiersProfileScreen extends Screen {
 
     private volatile String displayName;
     private volatile String playerId; // uuid when known, otherwise the name
-    private volatile Map<TierSource, Optional<TierProfile>> profiles;
-    private volatile boolean lookupFailed;
+    /** Filled per site as each lookup finishes; a site in {@code failedSites} couldn't be reached. */
+    private final Map<TierSource, Optional<TierProfile>> profiles = new ConcurrentHashMap<>();
+    private final Set<TierSource> failedSites = ConcurrentHashMap.newKeySet();
     private volatile SkinState skinState = SkinState.LOADING;
     private int skinWidth;
     private int skinHeight;
@@ -64,17 +66,17 @@ public class QTiersProfileScreen extends Screen {
             });
             loadSkin(0);
         });
-        TierApi.lookupAll(query).whenComplete((result, err) -> client.execute(() -> {
+        TierApi.lookupEach(query).forEach((source, future) -> future.whenComplete((result, err) -> client.execute(() -> {
             if (err != null) {
-                lookupFailed = true;
+                failedSites.add(source);
                 return;
             }
-            profiles = result;
+            profiles.put(source, result);
+            // Use the site's capitalisation if Mojang didn't resolve the name
             if (displayName.equals(query)) {
-                result.values().stream().filter(java.util.Objects::nonNull).flatMap(Optional::stream).map(TierProfile::name)
-                        .filter(n -> !n.isBlank()).findFirst().ifPresent(n -> displayName = n);
+                result.map(TierProfile::name).filter(n -> !n.isBlank()).ifPresent(n -> displayName = n);
             }
-        }));
+        })));
     }
 
     private void loadSkin(int rendererIndex) {
@@ -129,21 +131,15 @@ public class QTiersProfileScreen extends Screen {
         int skinPanel = Math.max(90, width / 4);
         renderSkin(context, 10, top, skinPanel - 10, bottom - top);
 
-        int colX = skinPanel + 10;
-        int colW = (width - colX - 10) / TierSource.values().length;
-        if (lookupFailed) {
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("Could not reach the tier sites"),
-                    colX + (width - colX) / 2, top + 20, 0xFFFF5555);
-            return;
-        }
-        if (profiles == null) {
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("Loading tiers..."),
-                    colX + (width - colX) / 2, top + 20, 0xFFAAAAAA);
-            return;
-        }
-        for (TierSource source : TierSource.values()) {
-            renderColumn(context, source, profiles.get(source), colX, top, colW);
-            colX += colW;
+        // Sites in a 2-column grid (4 sites = 2x2), each panel getting an equal share of the height
+        TierSource[] sources = TierSource.values();
+        int gridX = skinPanel + 10;
+        int cols = 2;
+        int rows = (sources.length + cols - 1) / cols;
+        int cellW = (width - gridX - 10) / cols;
+        int cellH = (bottom - top) / rows;
+        for (int i = 0; i < sources.length; i++) {
+            renderPanel(context, sources[i], gridX + (i % cols) * cellW, top + (i / cols) * cellH, cellW, cellH - 4);
         }
     }
 
@@ -164,14 +160,19 @@ public class QTiersProfileScreen extends Screen {
         }
     }
 
-    /** {@code profile} is null when the site couldn't be reached (see TierApi.lookupAll). */
-    private void renderColumn(DrawContext context, TierSource source, @Nullable Optional<TierProfile> profile, int x, int y, int w) {
+    /** One site's panel: header, stats line, then as many rankings as fit in {@code h}. */
+    private void renderPanel(DrawContext context, TierSource source, int x, int y, int w, int h) {
         context.fill(x + 2, y - 2, x + w - 2, y + 22, 0x40000000 | (source.color & 0xFFFFFF));
         context.drawTextWithShadow(textRenderer,
                 Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), x + 6, y + 1, 0xFFFFFFFF);
 
-        if (profile == null) {
+        if (failedSites.contains(source)) {
             context.drawTextWithShadow(textRenderer, Text.literal("Couldn't load"), x + 6, y + 12, 0xFFFF7777);
+            return;
+        }
+        Optional<TierProfile> profile = profiles.get(source);
+        if (profile == null) {
+            context.drawTextWithShadow(textRenderer, Text.literal("Loading..."), x + 6, y + 12, 0xFFAAAAAA);
             return;
         }
         if (profile.isEmpty() || !profile.get().isRanked()) {
@@ -179,14 +180,20 @@ public class QTiersProfileScreen extends Screen {
             return;
         }
         TierProfile p = profile.get();
-        String region = p.region().isBlank() || p.region().equals("??") ? "" : " · " + p.region();
-        String stats = "#" + p.overall() + " · " + p.points() + " pts";
-        // Region is the least important part; drop it rather than run into the next column
-        if (textRenderer.getWidth(stats + region) <= w - 10) stats += region;
+        String stats = p.summary();
+        // Region is the least important part; drop it rather than run into the next panel
+        if (!p.region().isEmpty() && textRenderer.getWidth(stats + " · " + p.region()) <= w - 10) stats += " · " + p.region();
         context.drawTextWithShadow(textRenderer, Text.literal(stats), x + 6, y + 12, 0xFFAAAAAA);
 
         int rowY = y + 28;
         List<Ranking> rankings = p.rankings().values().stream().sorted(Comparator.comparingInt(Ranking::score)).toList();
+        int fits = Math.max(1, (y + h - rowY) / ROW_H);
+        if (rankings.size() > fits) {
+            // Keep the best ones and say how many are hidden
+            context.drawTextWithShadow(textRenderer, Text.literal("+" + (rankings.size() - fits + 1) + " more"),
+                    x + 6, rowY + (fits - 1) * ROW_H, 0xFF888888);
+            rankings = rankings.subList(0, fits - 1);
+        }
         for (Ranking r : rankings) {
             GameModes.Mode mode = GameModes.get(r.mode());
             MutableText line = Text.empty().append(GameModes.icon(r.mode())).append(" ")

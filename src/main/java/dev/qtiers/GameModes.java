@@ -38,10 +38,25 @@ public final class GameModes {
             mode("minecart", "Minecart", '', 0xAAAAAA),
             mode("og_vanilla", "OG Vanilla", '', 0xFFAA00),
             mode("speed", "Speed", '', 0x43A9D1),
-            mode("trident", "Trident", '', 0x579B8C));
+            mode("trident", "Trident", '', 0x579B8C),
+            // MCPVP / PVPHQ ids; kits without a matching icon use the dot fallback
+            mode("netherite_pot", "Neth Pot", '', 0x7D4A40),
+            mode("diamond_smp", "Dia SMP", '', 0x8C668B),
+            mode("cart", "Cart", '', 0xAAAAAA),
+            mode("vanilla", "Vanilla", '', 0xFF55FF),
+            mode("spear", "Spear", '', 0x9FB8C8),
+            mode("spear_mace", "Spear", '', 0x9FB8C8),
+            mode("shield", "Shield", '•', 0xB08D57),
+            mode("early_game", "Early Game", '•', 0x7FD36B),
+            mode("late_game", "Late Game", '•', 0xE0A040),
+            mode("end_game", "End Game", '•', 0xB070E0));
 
     private static final Map<TierSource, List<String>> BY_SOURCE = Map.of(
             TierSource.PVPTIERS, List.of("crystal", "sword", "uhc", "pot", "neth_pot", "smp", "axe", "mace"),
+            TierSource.MCPVP, List.of("sword", "shield", "pot", "early_game", "end_game", "mace", "late_game",
+                    "spear", "diamond_smp", "netherite_pot", "creeper", "cart", "bow", "smp", "crystal", "uhc"),
+            TierSource.PVPHQ, List.of("sword", "axe", "mace", "spear_mace", "uhc", "netherite_pot", "pot", "smp",
+                    "diamond_smp", "vanilla", "cart"),
             TierSource.SUBTIERS, List.of("minecart", "dia_crystal", "debuff", "elytra", "speed", "creeper",
                     "manhunt", "dia_smp", "bow", "bed", "og_vanilla", "trident"));
 

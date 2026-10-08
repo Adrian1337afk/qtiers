@@ -48,6 +48,8 @@ public class QTiers implements ClientModInitializer {
 
         CYCLE_KEYS.put(TierSource.PVPTIERS, key("cycle_pvptiers", GLFW.GLFW_KEY_UNKNOWN));
         CYCLE_KEYS.put(TierSource.SUBTIERS, key("cycle_subtiers", GLFW.GLFW_KEY_UNKNOWN));
+        CYCLE_KEYS.put(TierSource.MCPVP, key("cycle_mcpvp", GLFW.GLFW_KEY_UNKNOWN));
+        CYCLE_KEYS.put(TierSource.PVPHQ, key("cycle_pvphq", GLFW.GLFW_KEY_UNKNOWN));
         toggleKey = key("toggle", GLFW.GLFW_KEY_UNKNOWN);
         nearestKey = key("nearest", GLFW.GLFW_KEY_H);
         configKey = key("config", GLFW.GLFW_KEY_UNKNOWN);
