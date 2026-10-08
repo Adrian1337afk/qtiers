@@ -196,7 +196,7 @@ public class QTiersProfileScreen extends Screen {
         }
         for (Ranking r : rankings) {
             GameModes.Mode mode = GameModes.get(r.mode());
-            MutableText line = Text.empty().append(GameModes.icon(r.mode())).append(" ")
+            MutableText line = Text.empty().append(GameModes.icon(source, r.mode())).append(" ")
                     .append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
                     .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(0xD0D0D0)));
             if (r.hasHigherPeak()) {
