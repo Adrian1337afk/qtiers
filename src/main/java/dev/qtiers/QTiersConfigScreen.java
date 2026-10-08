@@ -1,14 +1,12 @@
 package dev.qtiers;
 
 import dev.qtiers.QTiersConfig.HighestMode;
-import dev.qtiers.QTiersConfig.IconStyle;
 import dev.qtiers.QTiersConfig.Position;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -56,7 +54,7 @@ public class QTiersConfigScreen extends Screen {
                         QTiersConfig.save();
                     }));
             List<String> modes = GameModes.cycleFor(source);
-            addDrawableChild(CyclingButtonWidget.<String>builder(GameModes::styledName, site.gamemode)
+            addDrawableChild(CyclingButtonWidget.<String>builder(mode -> GameModes.styledName(source, mode), site.gamemode)
                     .values(modes)
                     .build(right, y, BUTTON_W, BUTTON_H, Text.literal("Mode"), (b, v) -> {
                         site.gamemode = v;
@@ -68,14 +66,8 @@ public class QTiersConfigScreen extends Screen {
         y += sectionGap;
         addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersConfigScreen::highestText, config.highestMode)
                 .values(Arrays.asList(HighestMode.values()))
-                .build(left, y, BUTTON_W, BUTTON_H, Text.literal("Highest"), (b, v) -> {
+                .build(left, y, BUTTON_W * 2 + GAP, BUTTON_H, Text.literal("Show highest tier"), (b, v) -> {
                     config.highestMode = v;
-                    QTiersConfig.save();
-                }));
-        addDrawableChild(CyclingButtonWidget.<IconStyle>builder(QTiersConfigScreen::iconStyleText, config.iconStyle)
-                .values(Arrays.asList(IconStyle.values()))
-                .build(right, y, BUTTON_W, BUTTON_H, Text.literal("Icons"), (b, v) -> {
-                    config.iconStyle = v;
                     QTiersConfig.save();
                 }));
         y += BUTTON_H + rowGap;
@@ -116,16 +108,9 @@ public class QTiersConfigScreen extends Screen {
     private static Text highestText(HighestMode m) {
         return switch (m) {
             case NEVER -> Text.literal("Never");
-            case NOT_FOUND -> Text.literal("If unranked");
+            case NOT_FOUND -> Text.literal("If not ranked in mode");
             case ALWAYS -> Text.literal("Always");
         };
-    }
-
-    /** Style name followed by a few sample icons drawn in that style. */
-    private static Text iconStyleText(IconStyle style) {
-        MutableText text = Text.literal(style.displayName + " ");
-        for (String mode : new String[]{"sword", "pot", "uhc"}) text.append(GameModes.icon(mode, style));
-        return text;
     }
 
     @Override

@@ -61,7 +61,7 @@ public final class TierDisplay {
             text.append(Text.literal(source.shortName + " ").styled(s -> s.withColor(source.color)));
         }
         if (config.showIcons) {
-            text.append(GameModes.icon(ranking.mode()));
+            text.append(GameModes.icon(source, ranking.mode()));
         }
         text.append(Text.literal(ranking.label()).styled(s -> s.withColor(ranking.color())));
         return text;

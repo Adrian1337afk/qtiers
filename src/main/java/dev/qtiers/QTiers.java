@@ -101,7 +101,7 @@ public class QTiers implements ClientModInitializer {
                 QTiersConfig.save();
                 client.player.sendMessage(Text.literal(e.getKey().displayName + ": ")
                         .styled(s -> s.withColor(e.getKey().color))
-                        .append(GameModes.styledName(site.gamemode)), true);
+                        .append(GameModes.styledName(e.getKey(), site.gamemode)), true);
             }
         }
         while (toggleKey.wasPressed()) {

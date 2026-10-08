@@ -1,0 +1,13 @@
+{"providers": [
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/sword.png", "ascent": 8, "height": 8, "chars": ["\uE900"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/axe.png", "ascent": 8, "height": 8, "chars": ["\uE901"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/mace.png", "ascent": 8, "height": 8, "chars": ["\uE902"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/spear_mace.png", "ascent": 8, "height": 8, "chars": ["\uE903"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/uhc.png", "ascent": 8, "height": 8, "chars": ["\uE904"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/netherite_pot.png", "ascent": 8, "height": 8, "chars": ["\uE905"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/pot.png", "ascent": 8, "height": 8, "chars": ["\uE906"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/smp.png", "ascent": 8, "height": 8, "chars": ["\uE907"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/diamond_smp.png", "ascent": 8, "height": 8, "chars": ["\uE908"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/vanilla.png", "ascent": 8, "height": 8, "chars": ["\uE909"]},
+  {"type": "bitmap", "file": "qtiers:icons/pvphq/cart.png", "ascent": 8, "height": 8, "chars": ["\uE90A"]}
+]}
