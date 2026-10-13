@@ -23,6 +23,7 @@ public final class GameModes {
     private static final Map<String, Mode> MODES = Map.ofEntries(
             mode("axe", "Axe", 0x55FF55),
             mode("mace", "Mace", 0xAAAAAA),
+            mode("nethop", "Neth OP", 0x7D4A40),
             mode("neth_pot", "Neth Pot", 0x7D4A40),
             mode("netherite_pot", "Neth Pot", 0x7D4A40),
             mode("pot", "Pot", 0xFF0000),
@@ -53,6 +54,7 @@ public final class GameModes {
             mode("end_game", "End Game", 0xB070E0));
 
     private static final Map<TierSource, List<String>> BY_SOURCE = Map.of(
+            TierSource.MCTIERS, List.of("vanilla", "uhc", "pot", "nethop", "smp", "sword", "axe", "mace"),
             TierSource.PVPTIERS, List.of("crystal", "sword", "uhc", "pot", "neth_pot", "smp", "axe", "mace"),
             TierSource.SUBTIERS, List.of("minecart", "dia_crystal", "debuff", "elytra", "speed", "creeper",
                     "manhunt", "dia_smp", "bow", "bed", "og_vanilla", "trident"),

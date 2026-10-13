@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- **MCTiers is back.** MCTiers has returned at [mctiers.gg](https://mctiers.gg), so its tiers show again, loaded from its new API, with MCTiers' own icons from mctiers.gg. It appears on the left of the name by default; you can move it or turn it off in `/qtiers`.
+- A keybind to cycle the MCTiers gamemode.
+
+### Changed
+- The profile screen shows the five sites in three columns.
+- The settings screen fits all five sites on small windows.
+
 ## 1.3.0 (2026-10-08)
 
 ### Added
