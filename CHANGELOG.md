@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.0 (2026-10-14)
 
 ### Added
 - **MCTiers is back.** MCTiers has returned at [mctiers.gg](https://mctiers.gg), so its tiers show again, loaded from its new API, with MCTiers' own icons from mctiers.gg. It appears on the left of the name by default; you can move it or turn it off in `/qtiers`.
