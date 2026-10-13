@@ -5,10 +5,6 @@ import java.util.function.Function;
 
 /** The tier-list websites, where to look players up, and how to read each site's answer. */
 public enum TierSource {
-    MCTIERS("MCTiers", "MC", 0x5DADEC,
-            uuid -> "https://mctiers.gg/api/profile/" + undashed(uuid),
-            name -> "https://mctiers.gg/api/profile/by-name/" + name,
-            TierParsers::mctiers),
     PVPTIERS("PvPTiers", "PVP", 0xE0544E,
             uuid -> "https://pvptiers.com/api/profile/" + undashed(uuid),
             name -> "https://pvptiers.com/api/search_profile/" + name,
