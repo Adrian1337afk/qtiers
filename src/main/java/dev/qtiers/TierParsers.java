@@ -55,6 +55,19 @@ final class TierParsers {
         return Optional.of(new TierProfile(strOr(json, "name", ""), summary, region(strOr(json, "region", "")), rankings));
     }
 
+    // ---------- MCTiers (mctiers.gg): same format, but Neth OP is sent twice, as "nethop" and "neth_pot" ----------
+
+    static Optional<TierProfile> mctiers(int status, URI uri, String body) {
+        return tierList(status, uri, body).map(p -> {
+            Map<String, Ranking> rankings = new LinkedHashMap<>(p.rankings());
+            Ranking alias = rankings.remove("neth_pot");
+            if (alias != null && !rankings.containsKey("nethop")) {
+                rankings.put("nethop", new Ranking("nethop", alias.tier(), alias.pos(), alias.peakTier(), alias.peakPos(), alias.retired()));
+            }
+            return new TierProfile(p.name(), p.summary(), p.region(), rankings);
+        });
+    }
+
     // ---------- PVPHQ: {"name", "regions": [...], "ranked": [{gametype, tier: "LT3", unranked, inactive, rating}], "best": {...}} ----------
 
     static Optional<TierProfile> pvphq(int status, URI uri, String body) {

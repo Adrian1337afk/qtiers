@@ -131,10 +131,10 @@ public class QTiersProfileScreen extends Screen {
         int skinPanel = Math.max(90, width / 4);
         renderSkin(context, 10, top, skinPanel - 10, bottom - top);
 
-        // Sites in a 2-column grid (4 sites = 2x2), each panel getting an equal share of the height
+        // Sites in a grid (4 sites = 2x2, 5-6 sites = 3 columns), each panel getting an equal share of the height
         TierSource[] sources = TierSource.values();
         int gridX = skinPanel + 10;
-        int cols = 2;
+        int cols = sources.length > 4 ? 3 : 2;
         int rows = (sources.length + cols - 1) / cols;
         int cellW = (width - gridX - 10) / cols;
         int cellH = (bottom - top) / rows;
