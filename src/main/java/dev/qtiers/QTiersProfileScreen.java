@@ -2,11 +2,14 @@ package dev.qtiers;
 
 import dev.qtiers.TierProfile.Ranking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmLinkScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.text.MutableText;
@@ -33,6 +36,7 @@ public class QTiersProfileScreen extends Screen {
             "https://mc-heads.net/body/%s/256");
     private static final AtomicInteger TEXTURE_COUNTER = new AtomicInteger();
     private static final int ROW_H = 11;
+    static final int SEARCH_W = 110;
 
     private enum SkinState { LOADING, LOADED, FAILED }
 
@@ -48,6 +52,7 @@ public class QTiersProfileScreen extends Screen {
     private int skinWidth;
     private int skinHeight;
     private boolean closed;
+    private TextFieldWidget search;
 
     public QTiersProfileScreen(String playerName) {
         super(Text.literal(playerName));
@@ -109,14 +114,51 @@ public class QTiersProfileScreen extends Screen {
     @Override
     protected void init() {
         int y = height - 28;
+        // Bottom-left search box: type a name, press Enter to look that player up
+        search = addDrawableChild(searchField(textRenderer, y, search));
+
+        // Buttons stay centred unless that would cover the search box; then they shrink to fit beside it
+        int buttonW = 100;
+        int startX = width / 2 - 154;
+        int minX = 10 + SEARCH_W + 6;
+        if (startX < minX) {
+            buttonW = Math.min(100, (width - minX - 10 - 8) / 3);
+            startX = minX;
+        }
         addDrawableChild(ButtonWidget.builder(Text.literal("NameMC"),
                         b -> ConfirmLinkScreen.open(this, "https://namemc.com/profile/" + playerId, true))
-                .dimensions(width / 2 - 154, y, 100, 20).build());
+                .dimensions(startX, y, buttonW, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(width / 2 - 50, y, 100, 20).build());
+                .dimensions(startX + buttonW + 4, y, buttonW, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Settings"),
                         b -> client.setScreen(new QTiersConfigScreen(this)))
-                .dimensions(width / 2 + 54, y, 100, 20).build());
+                .dimensions(startX + 2 * (buttonW + 4), y, buttonW, 20).build());
+    }
+
+    @Override
+    public boolean keyPressed(KeyInput input) {
+        if (searchEntered(search, input)) {
+            String name = search.getText();
+            close();
+            client.setScreen(new QTiersProfileScreen(name));
+            return true;
+        }
+        return super.keyPressed(input);
+    }
+
+    /** The bottom-left "Search player..." box, shared with the settings screen. Keeps typed text across resizes. */
+    static TextFieldWidget searchField(TextRenderer textRenderer, int y, TextFieldWidget previous) {
+        TextFieldWidget field = new TextFieldWidget(textRenderer, 10, y, SEARCH_W, 20, Text.literal("Search player"));
+        field.setMaxLength(16);
+        field.setTextPredicate(t -> t.matches("[A-Za-z0-9_]*"));
+        field.setPlaceholder(Text.literal("Search player...").formatted(Formatting.DARK_GRAY));
+        if (previous != null) field.setText(previous.getText());
+        return field;
+    }
+
+    /** True when Enter was pressed in the search box with a name long enough to look up. */
+    static boolean searchEntered(TextFieldWidget field, KeyInput input) {
+        return input.isEnter() && field != null && field.isFocused() && field.getText().length() >= 3;
     }
 
     @Override

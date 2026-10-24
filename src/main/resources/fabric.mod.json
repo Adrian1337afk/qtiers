@@ -12,7 +12,8 @@
   "icon": "assets/qtiers/icon.png",
   "environment": "client",
   "entrypoints": {
-    "client": ["dev.qtiers.QTiers"]
+    "client": ["dev.qtiers.QTiers"],
+    "modmenu": ["dev.qtiers.ModMenuIntegration"]
   },
   "mixins": ["qtiers.mixins.json"],
   "depends": {

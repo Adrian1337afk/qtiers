@@ -41,6 +41,8 @@ public final class QTiersConfig {
     /** Separator next to the name takes the tier's color instead of gray (like Tiers' dynamic separator). */
     public boolean coloredSeparator = false;
     public boolean showRetired = true;
+    /** Shows your own nametag in third person (F5), like the WhoAmI mod. */
+    public boolean showOwnNametag = true;
     public HighestMode highestMode = HighestMode.NOT_FOUND;
 
     public Map<TierSource, SiteSettings> sites = defaultSites();
