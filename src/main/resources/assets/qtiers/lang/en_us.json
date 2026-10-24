@@ -7,5 +7,7 @@
   "key.qtiers.cycle_tiermc": "Cycle TierMC gamemode",
   "key.qtiers.toggle": "Toggle QTiers",
   "key.qtiers.nearest": "Open nearest player's tiers",
-  "key.qtiers.config": "Open QTiers settings"
+  "key.qtiers.config": "Open QTiers settings",
+  "key.qtiers.lobby": "Open online players",
+  "key.qtiers.leaderboards": "Open leaderboards"
 }

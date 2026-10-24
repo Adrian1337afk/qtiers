@@ -54,8 +54,16 @@ public class QTiersProfileScreen extends Screen {
     private boolean closed;
     private TextFieldWidget search;
 
+    /** Screen to go back to on Done (the online players list or leaderboard); null closes to the game. */
+    private final Screen parent;
+
     public QTiersProfileScreen(String playerName) {
+        this(playerName, null);
+    }
+
+    public QTiersProfileScreen(String playerName, Screen parent) {
         super(Text.literal(playerName));
+        this.parent = parent;
         this.query = playerName;
         this.displayName = playerName;
         this.playerId = playerName;
@@ -139,8 +147,9 @@ public class QTiersProfileScreen extends Screen {
     public boolean keyPressed(KeyInput input) {
         if (searchEntered(search, input)) {
             String name = search.getText();
+            Screen back = parent;
             close();
-            client.setScreen(new QTiersProfileScreen(name));
+            client.setScreen(new QTiersProfileScreen(name, back));
             return true;
         }
         return super.keyPressed(input);
@@ -261,6 +270,6 @@ public class QTiersProfileScreen extends Screen {
     public void close() {
         closed = true;
         if (skinState == SkinState.LOADED) client.getTextureManager().destroyTexture(skinId);
-        super.close();
+        client.setScreen(parent);
     }
 }

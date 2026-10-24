@@ -31,6 +31,21 @@ In third person you see your own nametag, with your tiers, like the WhoAmI mod. 
 ### Player profiles
 `/qtiers <player>` opens a profile screen. It shows a full-body skin render and every tier, peak, point total, rank and region from all five sites. It also has a button to open the player's NameMC page. Press **H** to open the profile of the player nearest to you.
 
+### Opponent HUD
+When you hit a player, a small box in the top-left corner shows their tiers on every site for 10 seconds.
+
+### Online players
+`/qtiers list` (or a keybind) shows everyone on the server, strongest first, with each site's tier in its own column. Click a name to open their profile.
+
+### Leaderboards
+`/qtiers top` shows the top players of PvPTiers, SubTiers or TierMC, overall or per gamemode. PVPHQ and MCPVP have no public leaderboard.
+
+### Compare players
+`/qtiers compare <player1> <player2>` puts two players' tiers side by side, site by site, with the better tier marked ▲.
+
+### Clickable chat names
+Open chat and click an online player's name to see their tiers.
+
 ### Player search
 To look anyone up, type their name in the search box and press Enter. The box is at the bottom left of the profile screen and at the top of the settings screen.
 
@@ -46,6 +61,9 @@ Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Men
 | Command | What it does |
 |---|---|
 | `/qtiers <player>` | Opens that player's profile. Online names tab-complete. |
+| `/qtiers list` | Shows everyone online with their tiers |
+| `/qtiers top` | Opens the leaderboards |
+| `/qtiers compare <a> <b>` | Compares two players |
 | `/qtiers` or `/qtiers settings` | Opens the settings |
 | `/qtiers reload` | Reloads the config and fetches tiers again |
 
@@ -58,6 +76,8 @@ Set them under Options → Controls → QTiers.
 | Cycle the PvPTiers / SubTiers / MCPVP / PVPHQ / TierMC gamemode | unbound |
 | Toggle QTiers | unbound |
 | Open settings | unbound |
+| Open online players | unbound |
+| Open leaderboards | unbound |
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) 0.16 or newer for Minecraft 1.21.11.

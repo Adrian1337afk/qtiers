@@ -43,6 +43,10 @@ public final class QTiersConfig {
     public boolean showRetired = true;
     /** Shows your own nametag in third person (F5), like the WhoAmI mod. */
     public boolean showOwnNametag = true;
+    /** Top-left box with the tiers of the last player you hit. */
+    public boolean opponentHud = true;
+    /** Online players' names in chat open their profile when clicked. */
+    public boolean clickableNames = true;
     public HighestMode highestMode = HighestMode.NOT_FOUND;
 
     public Map<TierSource, SiteSettings> sites = defaultSites();

@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -13,6 +15,8 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -39,6 +43,8 @@ public class QTiers implements ClientModInitializer {
     private static KeyBinding toggleKey;
     private static KeyBinding nearestKey;
     private static KeyBinding configKey;
+    private static KeyBinding lobbyKey;
+    private static KeyBinding leaderboardKey;
 
     /** Screens opened from chat commands must wait a tick, or closing chat replaces them. */
     private static Supplier<Screen> pendingScreen;
@@ -57,6 +63,14 @@ public class QTiers implements ClientModInitializer {
         toggleKey = key("toggle", GLFW.GLFW_KEY_UNKNOWN);
         nearestKey = key("nearest", GLFW.GLFW_KEY_H);
         configKey = key("config", GLFW.GLFW_KEY_UNKNOWN);
+        lobbyKey = key("lobby", GLFW.GLFW_KEY_UNKNOWN);
+        leaderboardKey = key("leaderboards", GLFW.GLFW_KEY_UNKNOWN);
+
+        HudElementRegistry.addLast(Identifier.of(MOD_ID, "opponent"), OpponentHud::render);
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hit) -> {
+            if (world.isClient() && entity instanceof PlayerEntity target) OpponentHud.onAttack(target);
+            return ActionResult.PASS;
+        });
 
         ClientTickEvents.END_CLIENT_TICK.register(QTiers::onTick);
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
@@ -69,6 +83,25 @@ public class QTiers implements ClientModInitializer {
                             pendingScreen = () -> new QTiersConfigScreen(null);
                             return 1;
                         }))
+                        .then(literal("list").executes(ctx -> {
+                            pendingScreen = () -> new QTiersLobbyScreen(null);
+                            return 1;
+                        }))
+                        .then(literal("top").executes(ctx -> {
+                            pendingScreen = () -> new QTiersLeaderboardScreen(null);
+                            return 1;
+                        }))
+                        .then(literal("compare")
+                                .then(argument("first", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> CommandSource.suggestMatching(onlinePlayerNames(), builder))
+                                        .then(argument("second", StringArgumentType.word())
+                                                .suggests((ctx, builder) -> CommandSource.suggestMatching(onlinePlayerNames(), builder))
+                                                .executes(ctx -> {
+                                                    String a = StringArgumentType.getString(ctx, "first");
+                                                    String b = StringArgumentType.getString(ctx, "second");
+                                                    pendingScreen = () -> new QTiersCompareScreen(a, b, null);
+                                                    return 1;
+                                                }))))
                         .then(literal("reload").executes(ctx -> {
                             QTiersConfig.load();
                             TierApi.clearCache();
@@ -117,6 +150,12 @@ public class QTiers implements ClientModInitializer {
         }
         while (configKey.wasPressed()) {
             client.setScreen(new QTiersConfigScreen(null));
+        }
+        while (lobbyKey.wasPressed()) {
+            client.setScreen(new QTiersLobbyScreen(null));
+        }
+        while (leaderboardKey.wasPressed()) {
+            client.setScreen(new QTiersLeaderboardScreen(null));
         }
         while (nearestKey.wasPressed()) {
             AbstractClientPlayerEntity nearest = client.world.getPlayers().stream()

@@ -205,6 +205,14 @@ public final class TierApi {
         }).exceptionally(e -> Optional.empty());
     }
 
+    /** Downloads a page as text (used for leaderboards). Fails on any non-200 response. */
+    public static CompletableFuture<String> fetchString(String url) {
+        return HTTP.sendAsync(request(url), HttpResponse.BodyHandlers.ofString()).thenApply(response -> {
+            if (response.statusCode() != 200) throw new IllegalStateException("HTTP " + response.statusCode() + " from " + url);
+            return response.body();
+        });
+    }
+
     /** Downloads raw bytes (used for skin renders). Fails on any non-200 response. */
     public static CompletableFuture<byte[]> fetchBytes(String url) {
         return HTTP.sendAsync(request(url), HttpResponse.BodyHandlers.ofByteArray()).thenApply(response -> {

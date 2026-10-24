@@ -1,5 +1,6 @@
 package dev.qtiers;
 
+import dev.qtiers.QTiersConfig.HighestMode;
 import dev.qtiers.QTiersConfig.Position;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -30,7 +31,7 @@ public class QTiersSitesScreen extends Screen {
         QTiersConfig config = QTiersConfig.get();
         int left = width / 2 - BUTTON_W - GAP / 2;
         int right = width / 2 + GAP / 2;
-        int rows = TierSource.values().length;
+        int rows = TierSource.values().length + 1;
         int y = Math.max(40, (height - rows * (BUTTON_H + GAP) - 8 - BUTTON_H) / 2 + 6);
 
         // One row per site: position | gamemode
@@ -53,9 +54,25 @@ public class QTiersSitesScreen extends Screen {
             y += BUTTON_H + GAP;
         }
 
+        addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersSitesScreen::highestText, config.highestMode)
+                .values(Arrays.asList(HighestMode.values()))
+                .build(left, y, BUTTON_W * 2 + GAP, BUTTON_H, Text.literal("Show highest tier"), (b, v) -> {
+                    config.highestMode = v;
+                    QTiersConfig.save();
+                }));
+        y += BUTTON_H + GAP;
+
         y += 8;
         addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
                 .dimensions(width / 2 - 100, Math.min(y, height - 28), 200, BUTTON_H).build());
+    }
+
+    private static Text highestText(HighestMode m) {
+        return switch (m) {
+            case NEVER -> Text.literal("Never");
+            case NOT_FOUND -> Text.literal("If not ranked in mode");
+            case ALWAYS -> Text.literal("Always");
+        };
     }
 
     private static Text positionText(Position p) {

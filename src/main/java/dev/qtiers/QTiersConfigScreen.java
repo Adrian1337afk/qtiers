@@ -1,6 +1,5 @@
 package dev.qtiers;
 
-import dev.qtiers.QTiersConfig.HighestMode;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,7 +10,6 @@ import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 /** In-game settings, opened with /tiers, /qtiers or the config keybind. Per-site options live in {@link QTiersSitesScreen}. */
@@ -33,9 +31,8 @@ public class QTiersConfigScreen extends Screen {
         QTiersConfig config = QTiersConfig.get();
         int left = width / 2 - BUTTON_W - GAP / 2;
         int right = width / 2 + GAP / 2;
-        int full = BUTTON_W * 2 + GAP;
-        // Content is 7 rows plus a gap; centre it, but never above the title
-        int y = Math.max(30, (height - 7 * (BUTTON_H + GAP) - 8) / 2 + 6);
+        // Content is 8 rows plus a gap; centre it, but never above the title
+        int y = Math.max(30, (height - 8 * (BUTTON_H + GAP) - 8) / 2 + 6);
 
         // Top row: Tiers (per-site options) | player search box
         addDrawableChild(ButtonWidget.builder(Text.literal("Tiers"),
@@ -43,12 +40,12 @@ public class QTiersConfigScreen extends Screen {
                 .dimensions(left, y, BUTTON_W, BUTTON_H).build());
         search = addDrawableChild(QTiersProfileScreen.searchField(textRenderer, right, y, BUTTON_W, search));
         y += BUTTON_H + GAP;
-        addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersConfigScreen::highestText, config.highestMode)
-                .values(Arrays.asList(HighestMode.values()))
-                .build(left, y, full, BUTTON_H, Text.literal("Show highest tier"), (b, v) -> {
-                    config.highestMode = v;
-                    QTiersConfig.save();
-                }));
+        addDrawableChild(ButtonWidget.builder(Text.literal("Leaderboards"),
+                        b -> client.setScreen(new QTiersLeaderboardScreen(this)))
+                .dimensions(left, y, BUTTON_W, BUTTON_H).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Online players"),
+                        b -> client.setScreen(new QTiersLobbyScreen(this)))
+                .dimensions(right, y, BUTTON_W, BUTTON_H).build());
         y += BUTTON_H + GAP;
 
         y = toggle(left, y, "Enabled", config.enabled, v -> config.enabled = v, false);
@@ -59,6 +56,8 @@ public class QTiersConfigScreen extends Screen {
         y = toggle(right, y, "Colored separator", config.coloredSeparator, v -> config.coloredSeparator = v, true);
         y = toggle(left, y, "Show retired", config.showRetired, v -> config.showRetired = v, false);
         y = toggle(right, y, "Own name in F5", config.showOwnNametag, v -> config.showOwnNametag = v, true);
+        y = toggle(left, y, "Opponent HUD", config.opponentHud, v -> config.opponentHud = v, false);
+        y = toggle(right, y, "Clickable chat names", config.clickableNames, v -> config.clickableNames = v, true);
         y += 8;
 
         int bottom = Math.min(y, height - 28);
@@ -86,14 +85,6 @@ public class QTiersConfigScreen extends Screen {
                     QTiersConfig.save();
                 }));
         return endsRow ? y + BUTTON_H + GAP : y;
-    }
-
-    private static Text highestText(HighestMode m) {
-        return switch (m) {
-            case NEVER -> Text.literal("Never");
-            case NOT_FOUND -> Text.literal("If not ranked in mode");
-            case ALWAYS -> Text.literal("Always");
-        };
     }
 
     @Override
