@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0 (2026-10-24)
+
+### Added
+- **TierMC** tiers (tiermc.com), from its public API: all 8 gamemodes (Vanilla, Sword, Mace, UHC, Potion, Nethpot, Axe, SMP), plus each player's overall position, points and region. Retired TierMC tiers are shown with the R prefix.
+- TierMC's own 8 gamemode icons from tiermc.com.
+- A keybind to cycle the TierMC gamemode.
+
+### Changed
+- The profile screen shows the five sites in 3 columns. If a stats line is too long for its panel, the points total is left out instead of running into the next panel.
+- On small windows, the settings screen uses slightly shorter buttons so all five site rows fit.
+
 ## 1.3.0 (2026-10-08)
 
 ### Added
