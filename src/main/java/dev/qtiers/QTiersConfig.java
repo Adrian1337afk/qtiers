@@ -36,7 +36,7 @@ public final class QTiersConfig {
     public boolean showInNametags = true;
     public boolean showInTabList = true;
     public boolean showIcons = true;
-    /** Adds a small site tag (MC / PVP / SUB) in front of each tier. */
+    /** Adds a small site tag (PVP / SUB / MC / HQ / TMC) in front of each tier. */
     public boolean showSiteLabel = false;
     /** Separator next to the name takes the tier's color instead of gray (like Tiers' dynamic separator). */
     public boolean coloredSeparator = false;

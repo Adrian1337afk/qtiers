@@ -13,7 +13,7 @@ public enum TierSource {
             uuid -> "https://subtiers.net/api/v2/profile/" + undashed(uuid),
             name -> "https://subtiers.net/api/v2/profile/by-name/" + name,
             TierParsers::tierList),
-    MCPVP("MCPVP", "MCPVP", 0xFFB547,
+    MCPVP("MCPVP", "MC", 0xFFB547,
             uuid -> "https://www.mcpvp.com/@" + undashed(uuid),
             name -> "https://www.mcpvp.com/@" + name,
             TierParsers::mcpvp),
