@@ -3,13 +3,15 @@
 ## 1.4.0 (2026-10-24)
 
 ### Added
-- **TierMC** tiers (tiermc.com), from its public API: all 8 gamemodes (Vanilla, Sword, Mace, UHC, Potion, Nethpot, Axe, SMP), plus each player's overall position, points and region. Retired TierMC tiers are shown with the R prefix.
-- TierMC's own 8 gamemode icons from tiermc.com.
-- A keybind to cycle the TierMC gamemode.
+- **TierMC** tiers (tiermc.com), from its public API: all 8 gamemodes (Vanilla, Sword, Mace, UHC, Potion, Nethpot, Axe, SMP), plus each player's overall position, points and region. Retired TierMC tiers are shown with the R prefix. TierMC uses its own 8 gamemode icons from tiermc.com, and has its own keybind to cycle its gamemode.
+- **Your own name in F5**: in third person you now see your own nametag, with your tiers, like the WhoAmI mod. Turn it off with **Own name in F5** in the settings.
+- **Player search**: a search box at the bottom left of the profile screen and at the top of the settings screen. Type a name and press Enter to open that player's tiers.
+- **Mod Menu support**: the Configure button in Mod Menu opens the QTiers settings. Mod Menu is optional.
 
 ### Changed
+- **Tidier icons**: every gamemode icon is now about the same size, centred, and lined up with the tier text, with even spacing after it.
+- **Simpler settings screen**: the per-site options (left/right/off and gamemode) moved to their own page behind the **Tiers** button, next to the search box.
 - The profile screen shows the five sites in 3 columns. If a stats line is too long for its panel, the points total is left out instead of running into the next panel.
-- On small windows, the settings screen uses slightly shorter buttons so all five site rows fit.
 
 ## 1.3.0 (2026-10-08)
 
