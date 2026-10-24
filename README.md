@@ -2,60 +2,81 @@
 
 # QTiers
 
-QTiers is a Fabric client mod for **Minecraft 1.21.11**. It shows a player's PvP tier-list ranks right next to their name, in nametags and in the tab list. It covers five tier lists at once:
+**Every PvP tier list, right next to a player's name.**
 
-- **PvPTiers** (pvptiers.com)
-- **SubTiers** (subtiers.net)
-- **MCPVP** (mcpvp.com)
-- **PVPHQ** (pvphq.com)
-- **TierMC** (tiermc.com)
+QTiers is a Fabric client mod for **Minecraft 1.21.11**. It shows players' tier-list ranks in nametags and in the tab list, from five tier lists at once:
 
-It works like TierTagger, but for all five sites at once, and each site keeps its own icons.
+| Tier list | Label |
+|---|---|
+| [PvPTiers](https://pvptiers.com) | PVP |
+| [SubTiers](https://subtiers.net) | SUB |
+| [MCPVP](https://www.mcpvp.com) | MC |
+| [PVPHQ](https://pvphq.com) | HQ |
+| [TierMC](https://tiermc.com) | TMC |
+
+It works like TierTagger, but covers every site, and each site keeps its own icons. It runs only on your client, so it works on any server.
 
 ![Profile screen for qdran](profile-screen.png)
 
 ## Features
 
 ### Tiers next to names
-- Every site can sit on the **left** or **right** of the name, or be turned **off**.
-- Each site shows the gamemode you pick, or the player's **highest** tier. If a player isn't ranked in your gamemode, QTiers can fall back to their highest tier, like TierTagger (*Never*, *If not ranked in mode*, *Always*).
-- Every tier list uses **its own gamemode icons** from its own website, so you can tell at a glance which site a tier is from.
-- Tiers are **saved between sessions** (in `.minecraft/qtiers/cache.json`), so they show the moment you join a server and refresh in the background.
-- Tier colors come from **MCPVP**: High/Mid/Low tiers 1–6 (HT1 gold, HT2 silver, HT3 orange, HT4 green, HT5 blue, HT6 brown). Retired tiers show as `RHT1` in light blue.
+- Put each tier list on the **left** or **right** of the name, or turn it **off**.
+- Show one **gamemode** per tier list, or the player's **highest** tier. If a player isn't ranked in your gamemode, QTiers can fall back to their highest tier (*Never*, *If not ranked in mode*, *Always*, as in TierTagger).
+- Every tier list uses **its own gamemode icons** from its own website.
+- Tier colors come from **MCPVP**, from HT1 gold down to LT6 brown. Retired tiers show as `RHT1` in light blue.
+- Tiers are **saved between sessions**, so they show the moment you join and refresh in the background.
 
 ### Your own name in F5
-In third person you see your own nametag, with your tiers, like the WhoAmI mod. Turn it off with **Own name in F5** in the settings.
+In third person you see your own nametag with your tiers, like the WhoAmI mod.
 
 ![Own nametag with tiers in F5](docs/f5-own-name.png)
-
-### Player profiles
-`/qtiers <player>` opens a profile screen. It shows a full-body skin render and every tier, peak, point total, rank and region from all five sites. It also has a button to open the player's NameMC page. Press **H** to open the profile of the player nearest to you.
 
 ### Opponent HUD
 When you hit a player, a small box in the top-left corner shows their tiers on every site for 10 seconds.
 
+![Opponent HUD](docs/opponent-hud.png)
+
+### Player profiles
+`/qtiers <player>` opens a profile with a full-body skin render and every tier, peak, point total, rank and region from all five sites, plus a button to open the player's NameMC page. To open a profile you can also:
+- press **H** for the player nearest to you,
+- click a player's name in chat,
+- type a name into the search box on the profile or settings screen and press Enter.
+
 ### Online players
-`/qtiers list` (or a keybind) shows everyone on the server, strongest first, with each site's tier in its own column. Click a name to open their profile.
+`/qtiers list` shows everyone on the server, strongest first, with each site's tier in its own column. Click a name to open their profile.
+
+![Online players](docs/online-players.png)
 
 ### Leaderboards
-`/qtiers top` shows the top players of PvPTiers, SubTiers or TierMC, overall or per gamemode. PVPHQ and MCPVP have no public leaderboard.
+`/qtiers top` shows the top players of **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
+
+![TierMC sword leaderboard](docs/leaderboard.png)
 
 ### Compare players
-`/qtiers compare <player1> <player2>` puts two players' tiers side by side, site by site, with the better tier marked ▲.
+`/qtiers compare <player1> <player2>` puts two players side by side, site by site. When both are ranked in a gamemode, the better tier gets a ▲.
 
-### Clickable chat names
-Open chat and click an online player's name to see their tiers.
-
-### Player search
-To look anyone up, type their name in the search box and press Enter. The box is at the bottom left of the profile screen and at the top of the settings screen.
+![qdran vs octryx](docs/compare.png)
 
 ### Settings
-Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). The **Tiers** button opens a page where you choose each site's position and gamemode.
+Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). The **Tiers** button opens a page where you choose each site's position and gamemode, and when to show the highest tier.
 
 <p>
   <img src="docs/settings.png" width="49%" alt="QTiers settings">
   <img src="docs/tiers.png" width="49%" alt="Tiers page: position and gamemode per site">
 </p>
+
+| Setting | What it does |
+|---|---|
+| Enabled | Turns QTiers on or off |
+| Gamemode icons | Shows the gamemode icon in front of each tier |
+| Nametags / Tab list | Where tiers are shown |
+| Site labels | Adds PVP / SUB / MC / HQ / TMC in front of each tier |
+| Colored separator | The `\|` next to the name takes the tier's color |
+| Show retired | Includes retired tiers |
+| Own name in F5 | Shows your own nametag in third person |
+| Opponent HUD | Shows the tiers of the last player you hit |
+| Clickable chat names | Clicking a name in chat opens that player's profile |
 
 ## Commands
 | Command | What it does |
@@ -73,18 +94,17 @@ Set them under Options → Controls → QTiers.
 | Action | Default |
 |---|---|
 | Open nearest player's profile | H |
+| Open online players | unbound |
+| Open leaderboards | unbound |
 | Cycle the PvPTiers / SubTiers / MCPVP / PVPHQ / TierMC gamemode | unbound |
 | Toggle QTiers | unbound |
 | Open settings | unbound |
-| Open online players | unbound |
-| Open leaderboards | unbound |
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) 0.16 or newer for Minecraft 1.21.11.
-2. Put `qtiers-1.5.0.jar` and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
-3. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
-
-Download the jar from the [releases page](https://github.com/Adrian1337afk/qtiers/releases).
+2. Download `qtiers-1.5.0.jar` from the [releases page](https://github.com/Adrian1337afk/qtiers/releases).
+3. Put it and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
+4. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
 
 ## Build
 ```
@@ -97,7 +117,7 @@ The jar ends up in `build/libs/`.
 - **Gamemode icons:** each tier list's own website. They belong to those sites.
 - **Tier colors:** mcpvp.com.
 - **Skin renders:** [Visage](https://visage.surgeplay.com), with [mc-heads](https://mc-heads.net) as the fallback.
-- **Ideas:** the layout and profile screen come from [PvPTiers/Tiers](https://github.com/PvPTiers/Tiers), and the own-name-in-F5 idea from [WhoAmI](https://modrinth.com/mod/whoami). QTiers uses no code or textures from either mod.
+- **Ideas:** the layout and profile screen come from [PvPTiers/Tiers](https://github.com/PvPTiers/Tiers), and showing your own name in F5 from [WhoAmI](https://modrinth.com/mod/whoami). QTiers uses no code or textures from either mod.
 
 ## License
 QTiers is licensed under the [GNU GPL v3.0](LICENSE). The gamemode icons belong to their tier-list websites and are not covered by this license.
