@@ -37,9 +37,11 @@ public class QTiersConfigScreen extends Screen {
         // Content is 7 rows plus a gap; centre it, but never above the title
         int y = Math.max(30, (height - 7 * (BUTTON_H + GAP) - 8) / 2 + 6);
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("Tier lists..."),
+        // Top row: Tiers... (per-site options) | player search box
+        addDrawableChild(ButtonWidget.builder(Text.literal("Tiers..."),
                         b -> client.setScreen(new QTiersSitesScreen(this)))
-                .dimensions(left, y, full, BUTTON_H).build());
+                .dimensions(left, y, BUTTON_W, BUTTON_H).build());
+        search = addDrawableChild(QTiersProfileScreen.searchField(textRenderer, right, y, BUTTON_W, search));
         y += BUTTON_H + GAP;
         addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersConfigScreen::highestText, config.highestMode)
                 .values(Arrays.asList(HighestMode.values()))
@@ -60,19 +62,10 @@ public class QTiersConfigScreen extends Screen {
         y += 8;
 
         int bottom = Math.min(y, height - 28);
-        search = addDrawableChild(QTiersProfileScreen.searchField(textRenderer, bottom, search));
-        // Refresh | Done stay in their columns unless that would cover the search box; then they shrink beside it
-        int buttonW = BUTTON_W;
-        int startX = left;
-        int minX = 10 + QTiersProfileScreen.SEARCH_W + 6;
-        if (startX < minX) {
-            startX = minX;
-            buttonW = Math.min(BUTTON_W, (width - minX - 10 - GAP) / 2);
-        }
         addDrawableChild(ButtonWidget.builder(Text.literal("Refresh tiers"), b -> TierApi.clearCache())
-                .dimensions(startX, bottom, buttonW, BUTTON_H).build());
+                .dimensions(left, bottom, BUTTON_W, BUTTON_H).build());
         addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(startX + buttonW + GAP, bottom, buttonW, BUTTON_H).build());
+                .dimensions(right, bottom, BUTTON_W, BUTTON_H).build());
     }
 
     @Override

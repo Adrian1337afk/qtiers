@@ -36,7 +36,7 @@ public class QTiersProfileScreen extends Screen {
             "https://mc-heads.net/body/%s/256");
     private static final AtomicInteger TEXTURE_COUNTER = new AtomicInteger();
     private static final int ROW_H = 11;
-    static final int SEARCH_W = 110;
+    private static final int SEARCH_W = 110;
 
     private enum SkinState { LOADING, LOADED, FAILED }
 
@@ -115,7 +115,7 @@ public class QTiersProfileScreen extends Screen {
     protected void init() {
         int y = height - 28;
         // Bottom-left search box: type a name, press Enter to look that player up
-        search = addDrawableChild(searchField(textRenderer, y, search));
+        search = addDrawableChild(searchField(textRenderer, 10, y, SEARCH_W, search));
 
         // Buttons stay centred unless that would cover the search box; then they shrink to fit beside it
         int buttonW = 100;
@@ -146,9 +146,9 @@ public class QTiersProfileScreen extends Screen {
         return super.keyPressed(input);
     }
 
-    /** The bottom-left "Search player..." box, shared with the settings screen. Keeps typed text across resizes. */
-    static TextFieldWidget searchField(TextRenderer textRenderer, int y, TextFieldWidget previous) {
-        TextFieldWidget field = new TextFieldWidget(textRenderer, 10, y, SEARCH_W, 20, Text.literal("Search player"));
+    /** The "Search player..." box, shared with the settings screen. Keeps typed text across resizes. */
+    static TextFieldWidget searchField(TextRenderer textRenderer, int x, int y, int width, TextFieldWidget previous) {
+        TextFieldWidget field = new TextFieldWidget(textRenderer, x, y, width, 20, Text.literal("Search player"));
         field.setMaxLength(16);
         field.setTextPredicate(t -> t.matches("[A-Za-z0-9_]*"));
         field.setPlaceholder(Text.literal("Search player...").formatted(Formatting.DARK_GRAY));

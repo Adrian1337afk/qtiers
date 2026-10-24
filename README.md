@@ -17,9 +17,9 @@ PvPTiers        SubTiers MCPVP PVPHQ
 - **A separate gamemode for each site**, or **Highest**. Fallback rules match TierTagger: *Never*, *If not ranked in mode*, or *Always*.
 - **Each tier list has its own icons**, taken from its own website. Tiers use **MCPVP's colors** for High/Mid/Low tiers 1–6 (HT1 gold, HT2 silver, HT3 orange, HT4 green, HT5 blue, HT6 brown). Retired tiers show as `RHT1` in light blue.
 - **Your own name in F5**: see your own nametag, with tiers, in third person (like WhoAmI). Can be turned off.
-- **Search box** at the bottom left of the profile and settings screens: type a name and press Enter to see that player's tiers.
+- **Search box** on the profile screen (bottom left) and in settings (top right): type a name and press Enter to see that player's tiers.
 - **Open the nearest player's profile** with **H**.
-- **In-game settings**: `/qtiers`, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). Per-site options are under **Tier lists...**.
+- **In-game settings**: `/qtiers`, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). Per-site options are under **Tiers...**, next to the player search box.
 
 ## Commands
 - `/qtiers <player>`: open that player's profile screen. Online names tab-complete.
