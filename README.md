@@ -51,12 +51,12 @@ When you hit a player, a small box in the top-left corner shows their tiers on e
 ### Leaderboards
 `/qtiers top` shows the top players of **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
 
-![TierMC sword leaderboard](docs/leaderboard.png)
+![PvPTiers overall leaderboard](docs/leaderboard.png)
 
 ### Compare players
 `/qtiers compare <player1> <player2>` puts two players side by side, site by site. When both are ranked in a gamemode, the better tier gets a ▲.
 
-![qdran vs octryx](docs/compare.png)
+![qdran vs Reflex50](docs/compare.png)
 
 ### Settings
 Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). The **Tiers** button opens a page where you choose each site's position and gamemode, and when to show the highest tier.
