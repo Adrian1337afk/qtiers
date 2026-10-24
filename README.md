@@ -20,6 +20,7 @@ It works like TierTagger, but for all five sites at once, and each site keeps it
 - Every site can sit on the **left** or **right** of the name, or be turned **off**.
 - Each site shows the gamemode you pick, or the player's **highest** tier. If a player isn't ranked in your gamemode, QTiers can fall back to their highest tier, like TierTagger (*Never*, *If not ranked in mode*, *Always*).
 - Every tier list uses **its own gamemode icons** from its own website, so you can tell at a glance which site a tier is from.
+- Tiers are **saved between sessions** (in `.minecraft/qtiers/cache.json`), so they show the moment you join a server and refresh in the background.
 - Tier colors come from **MCPVP**: High/Mid/Low tiers 1–6 (HT1 gold, HT2 silver, HT3 orange, HT4 green, HT5 blue, HT6 brown). Retired tiers show as `RHT1` in light blue.
 
 ### Your own name in F5

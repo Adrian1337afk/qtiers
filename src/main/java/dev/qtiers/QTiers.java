@@ -3,6 +3,7 @@ package dev.qtiers;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -45,6 +46,8 @@ public class QTiers implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         QTiersConfig.load();
+        TierApi.startDiskCache();
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> TierApi.flushDiskCache());
 
         CYCLE_KEYS.put(TierSource.PVPTIERS, key("cycle_pvptiers", GLFW.GLFW_KEY_UNKNOWN));
         CYCLE_KEYS.put(TierSource.SUBTIERS, key("cycle_subtiers", GLFW.GLFW_KEY_UNKNOWN));
