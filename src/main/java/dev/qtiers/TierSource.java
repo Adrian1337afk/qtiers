@@ -20,7 +20,11 @@ public enum TierSource {
     PVPHQ("PVPHQ", "HQ", 0xA78BFA,
             uuid -> "https://pvphq.com/api/v1/players/" + uuid,
             name -> "https://pvphq.com/api/v1/players/by-name/" + name,
-            TierParsers::pvphq);
+            TierParsers::pvphq),
+    TIERMC("TierMC", "TMC", 0x5EC8E5,
+            uuid -> "https://tiermc.com/api/v2/profile/" + uuid,
+            name -> "https://tiermc.com/api/v2/profile/by-name/" + name,
+            TierParsers::tiermc);
 
     public final String displayName;
     public final String shortName;

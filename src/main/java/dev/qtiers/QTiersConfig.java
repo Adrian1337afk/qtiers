@@ -51,6 +51,7 @@ public final class QTiersConfig {
         map.put(TierSource.SUBTIERS, new SiteSettings(Position.RIGHT));
         map.put(TierSource.MCPVP, new SiteSettings(Position.RIGHT));
         map.put(TierSource.PVPHQ, new SiteSettings(Position.RIGHT));
+        map.put(TierSource.TIERMC, new SiteSettings(Position.RIGHT));
         return map;
     }
 

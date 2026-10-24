@@ -88,6 +88,32 @@ final class TierParsers {
         return Optional.of(new TierProfile(strOr(json, "name", ""), summary, region(region), rankings));
     }
 
+    // ---------- TierMC: {"name", "region", "points", "position", "rankings": [{gamemode, tier: "HT2", peak_tier, retired}]} ----------
+
+    static Optional<TierProfile> tiermc(int status, URI uri, String body) {
+        if (status == 404) return Optional.empty();
+        requireOk(status, uri);
+        JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+        if (json.has("error")) return Optional.empty();
+
+        Map<String, Ranking> rankings = new LinkedHashMap<>();
+        if (json.has("rankings") && json.get("rankings").isJsonArray()) {
+            for (JsonElement el : json.getAsJsonArray("rankings")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject r = el.getAsJsonObject();
+                int[] code = Ranking.parseCode(strOr(r, "tier", null));
+                String mode = strOr(r, "gamemode", null);
+                if (code == null || mode == null) continue;
+                int[] peak = Ranking.parseCode(strOr(r, "peak_tier", null));
+                if (peak == null) peak = code;
+                rankings.put(mode, new Ranking(mode, code[0], code[1], peak[0], peak[1], boolOr(r, "retired")));
+            }
+        }
+        int position = intOr(json, "position", 0);
+        String summary = (position > 0 ? "#" + position + " · " : "") + intOr(json, "points", 0) + " pts";
+        return Optional.of(new TierProfile(strOr(json, "name", ""), summary, region(strOr(json, "region", "")), rankings));
+    }
+
     // ---------- MCPVP: no API, so read the public profile page (www.mcpvp.com/@name) ----------
 
     private static final Pattern MCPVP_TITLE = Pattern.compile("<title>\\s*MCPVP\\s*\\|\\s*([^<]+?)\\s*</title>");

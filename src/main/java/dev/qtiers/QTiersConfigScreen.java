@@ -20,10 +20,11 @@ public class QTiersConfigScreen extends Screen {
     private static final int BUTTON_W = 150;
     private static final int BUTTON_H = 20;
     private static final int GAP = 4;
-    // Full layout needs ~292px; shorter windows (e.g. GUI scale 2 on 480p) use tight spacing and no subtitle
-    private static final int FULL_LAYOUT_HEIGHT = 296;
+    // Full layout needs ~316px; shorter windows (e.g. GUI scale 2 on 480p) use tight spacing and no subtitle
+    private static final int FULL_LAYOUT_HEIGHT = 320;
 
     private int rowGap = GAP;
+    private int buttonH = BUTTON_H;
     private boolean compact;
 
     private final @Nullable Screen parent;
@@ -40,6 +41,8 @@ public class QTiersConfigScreen extends Screen {
         int right = width / 2 + GAP / 2;
         compact = height < FULL_LAYOUT_HEIGHT;
         rowGap = compact ? 1 : GAP;
+        // 18px buttons in compact mode so five site rows still fit a 240px-tall window
+        buttonH = compact ? 18 : BUTTON_H;
         int sectionGap = compact ? 1 : 8;
         int y = compact ? 17 : 40;
 
@@ -49,28 +52,28 @@ public class QTiersConfigScreen extends Screen {
             Text label = Text.literal(source.displayName).styled(s -> s.withColor(source.color));
             addDrawableChild(CyclingButtonWidget.<Position>builder(QTiersConfigScreen::positionText, site.position)
                     .values(Arrays.asList(Position.values()))
-                    .build(left, y, BUTTON_W, BUTTON_H, label, (b, v) -> {
+                    .build(left, y, BUTTON_W, buttonH, label, (b, v) -> {
                         site.position = v;
                         QTiersConfig.save();
                     }));
             List<String> modes = GameModes.cycleFor(source);
             addDrawableChild(CyclingButtonWidget.<String>builder(mode -> GameModes.styledName(source, mode), site.gamemode)
                     .values(modes)
-                    .build(right, y, BUTTON_W, BUTTON_H, Text.literal("Mode"), (b, v) -> {
+                    .build(right, y, BUTTON_W, buttonH, Text.literal("Mode"), (b, v) -> {
                         site.gamemode = v;
                         QTiersConfig.save();
                     }));
-            y += BUTTON_H + rowGap;
+            y += buttonH + rowGap;
         }
 
         y += sectionGap;
         addDrawableChild(CyclingButtonWidget.<HighestMode>builder(QTiersConfigScreen::highestText, config.highestMode)
                 .values(Arrays.asList(HighestMode.values()))
-                .build(left, y, BUTTON_W * 2 + GAP, BUTTON_H, Text.literal("Show highest tier"), (b, v) -> {
+                .build(left, y, BUTTON_W * 2 + GAP, buttonH, Text.literal("Show highest tier"), (b, v) -> {
                     config.highestMode = v;
                     QTiersConfig.save();
                 }));
-        y += BUTTON_H + rowGap;
+        y += buttonH + rowGap;
 
         y = toggle(left, y, "Enabled", config.enabled, v -> config.enabled = v, false);
         y = toggle(right, y, "Gamemode icons", config.showIcons, v -> config.showIcons = v, true);
@@ -80,21 +83,21 @@ public class QTiersConfigScreen extends Screen {
         y = toggle(right, y, "Colored separator", config.coloredSeparator, v -> config.coloredSeparator = v, true);
         y = toggle(left, y, "Show retired", config.showRetired, v -> config.showRetired = v, false);
         addDrawableChild(ButtonWidget.builder(Text.literal("Refresh tiers"), b -> TierApi.clearCache())
-                .dimensions(right, y, BUTTON_W, BUTTON_H).build());
-        y += BUTTON_H + rowGap + sectionGap;
+                .dimensions(right, y, BUTTON_W, buttonH).build());
+        y += buttonH + rowGap + sectionGap;
 
         addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(width / 2 - 100, Math.min(y, height - 28), 200, BUTTON_H).build());
+                .dimensions(width / 2 - 100, Math.min(y, height - 28), 200, buttonH).build());
     }
 
     /** Adds an on/off button; returns the next row's y once the right column is filled. */
     private int toggle(int x, int y, String name, boolean value, Consumer<Boolean> setter, boolean endsRow) {
         addDrawableChild(CyclingButtonWidget.onOffBuilder(value)
-                .build(x, y, BUTTON_W, BUTTON_H, Text.literal(name), (b, v) -> {
+                .build(x, y, BUTTON_W, buttonH, Text.literal(name), (b, v) -> {
                     setter.accept(v);
                     QTiersConfig.save();
                 }));
-        return endsRow ? y + BUTTON_H + rowGap : y;
+        return endsRow ? y + buttonH + rowGap : y;
     }
 
     private static Text positionText(Position p) {

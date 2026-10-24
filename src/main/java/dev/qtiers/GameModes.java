@@ -50,7 +50,9 @@ public final class GameModes {
             mode("shield", "Shield", 0xB08D57),
             mode("early_game", "Early Game", 0x7FD36B),
             mode("late_game", "Late Game", 0xE0A040),
-            mode("end_game", "End Game", 0xB070E0));
+            mode("end_game", "End Game", 0xB070E0),
+            mode("potion", "Pot", 0xFF0000),
+            mode("nethpot", "Neth Pot", 0x7D4A40));
 
     private static final Map<TierSource, List<String>> BY_SOURCE = Map.of(
             TierSource.PVPTIERS, List.of("crystal", "sword", "uhc", "pot", "neth_pot", "smp", "axe", "mace"),
@@ -59,7 +61,8 @@ public final class GameModes {
             TierSource.MCPVP, List.of("sword", "shield", "pot", "early_game", "end_game", "mace", "late_game",
                     "spear", "diamond_smp", "netherite_pot", "creeper", "cart", "bow", "smp", "crystal", "uhc"),
             TierSource.PVPHQ, List.of("sword", "axe", "mace", "spear_mace", "uhc", "netherite_pot", "pot", "smp",
-                    "diamond_smp", "vanilla", "cart"));
+                    "diamond_smp", "vanilla", "cart"),
+            TierSource.TIERMC, List.of("vanilla", "sword", "mace", "uhc", "potion", "nethpot", "axe", "smp"));
 
     private GameModes() {}
 

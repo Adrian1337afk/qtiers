@@ -131,10 +131,10 @@ public class QTiersProfileScreen extends Screen {
         int skinPanel = Math.max(90, width / 4);
         renderSkin(context, 10, top, skinPanel - 10, bottom - top);
 
-        // Sites in a 2-column grid (4 sites = 2x2), each panel getting an equal share of the height
+        // Sites in a grid (4 sites = 2x2, 5+ = 3 columns), each panel getting an equal share of the height
         TierSource[] sources = TierSource.values();
         int gridX = skinPanel + 10;
-        int cols = 2;
+        int cols = sources.length > 4 ? 3 : 2;
         int rows = (sources.length + cols - 1) / cols;
         int cellW = (width - gridX - 10) / cols;
         int cellH = (bottom - top) / rows;
@@ -181,6 +181,8 @@ public class QTiersProfileScreen extends Screen {
         }
         TierProfile p = profile.get();
         String stats = p.summary();
+        // Narrow panels (3 columns): drop trailing parts like the points total rather than overflow
+        while (textRenderer.getWidth(stats) > w - 10 && stats.contains(" · ")) stats = stats.substring(0, stats.lastIndexOf(" · "));
         // Region is the least important part; drop it rather than run into the next panel
         if (!p.region().isEmpty() && textRenderer.getWidth(stats + " · " + p.region()) <= w - 10) stats += " · " + p.region();
         context.drawTextWithShadow(textRenderer, Text.literal(stats), x + 6, y + 12, 0xFFAAAAAA);
