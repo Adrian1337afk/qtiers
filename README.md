@@ -81,7 +81,7 @@ Set them under Options → Controls → QTiers.
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) 0.16 or newer for Minecraft 1.21.11.
-2. Put `qtiers-1.4.0.jar` and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
+2. Put `qtiers-1.5.0.jar` and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
 3. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
 
 Download the jar from the [releases page](https://github.com/Adrian1337afk/qtiers/releases).

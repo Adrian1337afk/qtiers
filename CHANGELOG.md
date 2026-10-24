@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.5.0 (2026-10-25)
+
+### Added
+- **Tiers load instantly**: QTiers now saves tiers between sessions (in `.minecraft/qtiers/cache.json`), so they show the moment you join a server and refresh in the background. Saved tiers are kept for up to 7 days.
+- **Opponent HUD**: when you hit a player, a small box in the top-left corner shows their tiers on every site for 10 seconds. Turn it off with **Opponent HUD** in the settings.
+- **Online players**: `/qtiers list` (or a keybind) shows everyone on the server, strongest first, with each site's tier in its own column. Click a name to open their profile.
+- **Leaderboards**: `/qtiers top` (or a keybind) shows the top players of PvPTiers, SubTiers or TierMC, overall or per gamemode. Click a name to open their profile.
+- **Compare players**: `/qtiers compare <player1> <player2>` shows two players' tiers side by side, site by site, with the better tier marked ▲.
+- **Clickable chat names**: open chat and click an online player's name to see their tiers. Turn it off with **Clickable chat names** in the settings.
+
+### Changed
+- The settings screen has new **Leaderboards** and **Online players** buttons. **Show highest tier** moved to the **Tiers** page.
+- **Refresh tiers** keeps showing the old tiers until the new ones have loaded.
+- MCPVP's short label (opponent HUD and site labels) is now **MC**.
+- Done on a profile opened from the online players list or a leaderboard takes you back to that list.
+
 ## 1.4.0 (2026-10-24)
 
 ### Added
