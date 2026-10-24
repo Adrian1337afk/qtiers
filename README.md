@@ -19,7 +19,7 @@ PvPTiers        SubTiers MCPVP PVPHQ
 - **Your own name in F5**: see your own nametag, with tiers, in third person (like WhoAmI). Can be turned off.
 - **Search box** on the profile screen (bottom left) and in settings (top right): type a name and press Enter to see that player's tiers.
 - **Open the nearest player's profile** with **H**.
-- **In-game settings**: `/qtiers`, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). Per-site options are under **Tiers...**, next to the player search box.
+- **In-game settings**: `/qtiers`, or the Configure button in [Mod Menu](https://modrinth.com/mod/modmenu). Per-site options are under **Tiers**, next to the player search box.
 
 ## Commands
 - `/qtiers <player>`: open that player's profile screen. Online names tab-complete.

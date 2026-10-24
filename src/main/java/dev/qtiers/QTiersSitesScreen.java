@@ -16,7 +16,7 @@ import static dev.qtiers.QTiersConfigScreen.BUTTON_H;
 import static dev.qtiers.QTiersConfigScreen.BUTTON_W;
 import static dev.qtiers.QTiersConfigScreen.GAP;
 
-/** "Tiers..." page of the settings: where each site's tier goes and which gamemode it shows. */
+/** "Tiers" page of the settings: where each site's tier goes and which gamemode it shows. */
 public class QTiersSitesScreen extends Screen {
     private final Screen parent;
 

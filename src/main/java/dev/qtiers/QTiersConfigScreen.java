@@ -37,8 +37,8 @@ public class QTiersConfigScreen extends Screen {
         // Content is 7 rows plus a gap; centre it, but never above the title
         int y = Math.max(30, (height - 7 * (BUTTON_H + GAP) - 8) / 2 + 6);
 
-        // Top row: Tiers... (per-site options) | player search box
-        addDrawableChild(ButtonWidget.builder(Text.literal("Tiers..."),
+        // Top row: Tiers (per-site options) | player search box
+        addDrawableChild(ButtonWidget.builder(Text.literal("Tiers"),
                         b -> client.setScreen(new QTiersSitesScreen(this)))
                 .dimensions(left, y, BUTTON_W, BUTTON_H).build());
         search = addDrawableChild(QTiersProfileScreen.searchField(textRenderer, right, y, BUTTON_W, search));
