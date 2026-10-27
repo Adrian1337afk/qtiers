@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.1 (2026-10-27)
+
+### Fixed
+- **Tiers now show on servers with custom nametags and tab lists, like mcpvp.club.** These servers hide the normal nametag and show names with floating text above the player, and their tab list rows are fake entries. QTiers now adds tiers to the floating name and finds the real player behind each tab row.
+- The online players list no longer shows a server's fake tab rows.
+
+### Changed
+- Player nametags sit a little higher.
+
+### Added
+- `/qtiers debug` writes what the server sends for names and the tab list to the log, to help track down servers where tiers don't show.
+
 ## 1.5.0 (2026-10-25)
 
 ### Added
