@@ -56,7 +56,7 @@ public class QTiersLeaderboardScreen extends QTiersListScreen {
 
     private Text modeName(String m) {
         return Leaderboards.OVERALL.equals(m) ? Text.literal("Overall").styled(s -> s.withColor(0xFFD166))
-                : GameModes.styledName(site, m);
+                : ModeTexts.styledName(site, m);
     }
 
     private void load() {
@@ -94,7 +94,7 @@ public class QTiersLeaderboardScreen extends QTiersListScreen {
         if (!overall) {
             // Gamemode boards: tier label in front of the name, like a tier list
             context.drawTextWithShadow(textRenderer, Text.empty()
-                    .append(GameModes.icon(site, mode))
+                    .append(ModeTexts.icon(site, mode))
                     .append(Text.literal(row.label()).styled(s -> s.withColor(row.color()))), nameX, y, 0xFFFFFFFF);
             nameX += 44;
         }

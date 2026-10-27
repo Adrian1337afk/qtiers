@@ -72,7 +72,7 @@ public final class TierApi {
     });
 
     private static final java.util.function.BiConsumer<TierSource, Throwable> LOGGER_FAILED =
-            (source, e) -> QTiers.LOGGER.warn("Could not load {} profile: {}", source.displayName, e.toString());
+            (source, e) -> QTiersLog.LOGGER.warn("Could not load {} profile: {}", source.displayName, e.toString());
 
     private TierApi() {}
 
@@ -161,9 +161,9 @@ public final class TierApi {
                     loaded++;
                 }
             }
-            QTiers.LOGGER.info("Loaded {} saved tier results", loaded);
+            QTiersLog.LOGGER.info("Loaded {} saved tier results", loaded);
         } catch (Exception e) {
-            QTiers.LOGGER.warn("Could not read {}, starting with an empty cache", DISK_FILE, e);
+            QTiersLog.LOGGER.warn("Could not read {}, starting with an empty cache", DISK_FILE, e);
         }
     }
 
@@ -191,7 +191,7 @@ public final class TierApi {
             Files.writeString(tmp, GSON.toJson(out));
             Files.move(tmp, DISK_FILE, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         } catch (Exception e) {
-            QTiers.LOGGER.warn("Could not save {}", DISK_FILE, e);
+            QTiersLog.LOGGER.warn("Could not save {}", DISK_FILE, e);
         }
     }
 

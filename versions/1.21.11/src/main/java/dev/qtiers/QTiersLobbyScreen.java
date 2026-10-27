@@ -100,7 +100,7 @@ public class QTiersLobbyScreen extends QTiersListScreen {
             if (r.isPresent()) {
                 Ranking ranking = r.get();
                 MutableText t = Text.empty();
-                if (QTiersConfig.get().showIcons) t.append(GameModes.icon(source, ranking.mode()));
+                if (QTiersConfig.get().showIcons) t.append(ModeTexts.icon(source, ranking.mode()));
                 cell = t.append(Text.literal(ranking.label()).styled(s -> s.withColor(ranking.color())));
             } else {
                 cell = Text.literal("-").styled(s -> s.withColor(0x555555));

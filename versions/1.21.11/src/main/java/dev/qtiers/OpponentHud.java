@@ -42,7 +42,7 @@ public final class OpponentHud {
             if (ranking.isEmpty()) continue;
             Ranking r = ranking.get();
             MutableText line = Text.literal(source.shortName + " ").styled(s -> s.withColor(source.color));
-            if (config.showIcons) line.append(GameModes.icon(source, r.mode()));
+            if (config.showIcons) line.append(ModeTexts.icon(source, r.mode()));
             line.append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
                     .append(Text.literal(" " + GameModes.get(r.mode()).title()).styled(s -> s.withColor(0xBBBBBB)));
             lines.add(line);

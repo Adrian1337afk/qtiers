@@ -1,18 +1,13 @@
 package dev.qtiers;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.StyleSpriteSource;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
- * Gamemode keys used by each site, with each site's own icons and a text color per mode.
- * Icons are glyphs in assets/qtiers/font/&lt;site&gt;.json: U+E900 + the mode's index in that
- * site's {@link #BY_SOURCE} list (keep the font files in the same order).
+ * Gamemode keys used by each site and a text color per mode. Icons are glyphs in
+ * assets/qtiers/font/&lt;site&gt;.json: U+E900 + the mode's index in that site's {@link #BY_SOURCE}
+ * list (keep the font files in the same order); {@code ModeTexts} turns them into text per version.
  */
 public final class GameModes {
     /** Special gamemode value meaning "show this player's highest tier on the site". */
@@ -86,20 +81,8 @@ public final class GameModes {
         return modes.get((i + 1) % modes.size());
     }
 
-    /** The gamemode's icon from the site's own icon set; a dot for modes the site doesn't list. */
-    public static Text icon(TierSource source, String id) {
-        int index = BY_SOURCE.get(source).indexOf(id);
-        if (index < 0) return Text.literal("•");
-        StyleSpriteSource font = new StyleSpriteSource.Font(
-                Identifier.of(QTiers.MOD_ID, source.name().toLowerCase(Locale.ROOT)));
-        return Text.literal(String.valueOf((char) (0xE900 + index))).styled(s -> s.withColor(0xFFFFFF).withFont(font));
-    }
-
-    /** Icon + title in the mode's color, e.g. for chat messages and buttons. */
-    public static MutableText styledName(TierSource source, String id) {
-        if (HIGHEST.equals(id)) return Text.literal("Highest").styled(s -> s.withColor(0xFFD166));
-        Mode mode = get(id);
-        return Text.empty().append(icon(source, id)).append(" ")
-                .append(Text.literal(mode.title()).styled(s -> s.withColor(mode.color())));
+    /** Position of a gamemode in the site's icon font (U+E900 + index), or -1 if the site doesn't list it. */
+    public static int iconIndex(TierSource source, String id) {
+        return BY_SOURCE.get(source).indexOf(id);
     }
 }

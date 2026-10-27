@@ -111,7 +111,7 @@ public class QTiersCompareScreen extends QTiersListScreen {
             drawClipped(context, row.note(), colA(x, width), y, width / 2 - 4, 0xFFFFFFFF);
             return;
         }
-        drawClipped(context, GameModes.styledName(row.source(), row.mode()), x + 8, y, width / 2 - 12, 0xFFFFFFFF);
+        drawClipped(context, ModeTexts.styledName(row.source(), row.mode()), x + 8, y, width / 2 - 12, 0xFFFFFFFF);
         // Lower score is better; a retired tier never beats an active one
         int a = row.a().map(r -> r.score() + (r.retired() ? 1000 : 0)).orElse(Integer.MAX_VALUE);
         int b = row.b().map(r -> r.score() + (r.retired() ? 1000 : 0)).orElse(Integer.MAX_VALUE);

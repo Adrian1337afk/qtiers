@@ -76,7 +76,7 @@ public final class QTiersConfig {
                 if (loaded != null) instance = loaded;
             }
         } catch (Exception e) {
-            QTiers.LOGGER.warn("Could not read {}, using defaults", FILE, e);
+            QTiersLog.LOGGER.warn("Could not read {}, using defaults", FILE, e);
         }
         instance.repair();
         save();
@@ -102,7 +102,7 @@ public final class QTiersConfig {
             Files.createDirectories(FILE.getParent());
             Files.writeString(FILE, GSON.toJson(instance));
         } catch (IOException e) {
-            QTiers.LOGGER.warn("Could not write {}", FILE, e);
+            QTiersLog.LOGGER.warn("Could not write {}", FILE, e);
         }
     }
 }

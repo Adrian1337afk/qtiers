@@ -1,35 +1,15 @@
 plugins {
-    id 'fabric-loom' version "${loom_version}"
+    // 1.21.x is obfuscated and uses Yarn names (remap); 26.x ships unobfuscated with Mojang names
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}" apply false
+    id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
 }
 
-version = project.mod_version
-group = project.maven_group
-
-base {
-    archivesName = project.archives_base_name
-}
-
-repositories {
-    maven { url = "https://maven.terraformersmc.com/releases/" }
-}
-
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // Optional: only used for the settings button in Mod Menu
-    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-}
-
-processResources {
-    inputs.property "version", project.version
-    filesMatching("fabric.mod.json") {
-        expand "version": inputs.properties.version
+// Copies every version's jar to build/libs, e.g. qtiers-1.5.1+1.21.11.jar
+tasks.register('collectJars', Copy) {
+    subprojects.each { p -> dependsOn(p.tasks.named('build')) }
+    from(subprojects.collect { p -> p.layout.buildDirectory.dir('libs') }) {
+        include '*.jar'
+        exclude '*-sources.jar'
     }
+    into layout.buildDirectory.dir('libs')
 }
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
-}
-

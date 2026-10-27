@@ -36,7 +36,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class QTiers implements ClientModInitializer {
     public static final String MOD_ID = "qtiers";
-    public static final Logger LOGGER = LoggerFactory.getLogger("QTiers");
+    public static final Logger LOGGER = QTiersLog.LOGGER;
 
     private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of(MOD_ID, "main"));
     private static final Map<TierSource, KeyBinding> CYCLE_KEYS = new EnumMap<>(TierSource.class);
@@ -142,7 +142,7 @@ public class QTiers implements ClientModInitializer {
                 QTiersConfig.save();
                 client.player.sendMessage(Text.literal(e.getKey().displayName + ": ")
                         .styled(s -> s.withColor(e.getKey().color))
-                        .append(GameModes.styledName(e.getKey(), site.gamemode)), true);
+                        .append(ModeTexts.styledName(e.getKey(), site.gamemode)), true);
             }
         }
         while (toggleKey.wasPressed()) {

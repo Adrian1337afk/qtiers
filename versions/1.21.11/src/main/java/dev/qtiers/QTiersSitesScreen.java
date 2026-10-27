@@ -45,7 +45,7 @@ public class QTiersSitesScreen extends Screen {
                         QTiersConfig.save();
                     }));
             List<String> modes = GameModes.cycleFor(source);
-            addDrawableChild(CyclingButtonWidget.<String>builder(mode -> GameModes.styledName(source, mode), site.gamemode)
+            addDrawableChild(CyclingButtonWidget.<String>builder(mode -> ModeTexts.styledName(source, mode), site.gamemode)
                     .values(modes)
                     .build(right, y, BUTTON_W, BUTTON_H, Text.literal("Mode"), (b, v) -> {
                         site.gamemode = v;
