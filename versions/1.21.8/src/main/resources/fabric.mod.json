@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "qtiers",
+  "version": "${version}",
+  "name": "QTiers",
+  "description": "Shows PvPTiers, SubTiers, MCPVP, PVPHQ and TierMC rankings next to player names in nametags and the tab list.",
+  "authors": ["qdran"],
+  "contact": {
+    "homepage": "https://qdran.de"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/qtiers/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.qtiers.QTiers"],
+    "modmenu": ["dev.qtiers.ModMenuIntegration"]
+  },
+  "mixins": ["qtiers.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "${minecraft_range}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  }
+}

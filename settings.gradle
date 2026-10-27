@@ -8,7 +8,7 @@ pluginManagement {
 rootProject.name = 'qtiers'
 
 // One Gradle project per supported Minecraft version; shared code lives in common/
-['1.21.11'].each { v ->
+['1.21.11', '1.21.8'].each { v ->
     include ":${v}"
     project(":${v}").projectDir = file("versions/${v}")
 }
