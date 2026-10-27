@@ -45,6 +45,9 @@ public final class QTiersConfig {
     public boolean showOwnNametag = true;
     /** Top-left box with the tiers of the last player you hit. */
     public boolean opponentHud = true;
+    /** Opponent HUD position as a share (0..1) of the free space left/right and top/bottom; 0,0 = top-left corner. */
+    public double opponentHudX = 0;
+    public double opponentHudY = 0;
     /** Online players' names in chat open their profile when clicked. */
     public boolean clickableNames = true;
     public HighestMode highestMode = HighestMode.NOT_FOUND;
