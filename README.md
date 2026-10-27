@@ -4,7 +4,7 @@
 
 **Every PvP tier list, right next to a player's name.**
 
-QTiers is a Fabric client mod for **Minecraft 1.21.11**. It shows players' tier-list ranks in nametags and in the tab list, from five tier lists at once:
+QTiers is a Fabric client mod for **Minecraft 1.21.4, 1.21.8, 1.21.11, 26.1, 26.2 and 26.3**. It shows players' tier-list ranks in nametags and in the tab list, from five tier lists at once:
 
 | Tier list | Label |
 |---|---|
@@ -101,16 +101,26 @@ Set them under Options → Controls → QTiers.
 | Open settings | unbound |
 
 ## Install
-1. Install [Fabric Loader](https://fabricmc.net/use/) 0.16 or newer for Minecraft 1.21.11.
-2. Download `qtiers-1.5.1.jar` from the [releases page](https://github.com/Adrian1337afk/qtiers/releases).
+1. Install [Fabric Loader](https://fabricmc.net/use/) for your Minecraft version.
+2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.5.1+1.21.11.jar`:
+
+   | Minecraft | Jar |
+   |---|---|
+   | 1.21.4 | `qtiers-<version>+1.21.4.jar` |
+   | 1.21.6 – 1.21.8 | `qtiers-<version>+1.21.8.jar` |
+   | 1.21.11 | `qtiers-<version>+1.21.11.jar` |
+   | 26.1 – 26.1.2 | `qtiers-<version>+26.1.jar` |
+   | 26.2 | `qtiers-<version>+26.2.jar` |
+   | 26.3 | `qtiers-<version>+26.3.jar` |
+
 3. Put it and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
 4. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
 
 ## Build
 ```
-gradlew build
+gradlew collectJars
 ```
-The jar ends up in `build/libs/`.
+One jar per Minecraft version ends up in `build/libs/`. Shared code lives in `common/`; each version's Minecraft-facing code is in `versions/<minecraft>/`.
 
 ## Credits
 - **Tier data:** the [PvPTiers](https://pvptiers.com), [SubTiers](https://subtiers.net), [PVPHQ](https://pvphq.com) and [TierMC](https://tiermc.com/api.html) APIs, and public [MCPVP](https://www.mcpvp.com) profile pages (MCPVP has no API).
