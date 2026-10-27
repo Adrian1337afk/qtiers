@@ -44,6 +44,8 @@ public class QTiersLobbyScreen extends QTiersListScreen {
         QTiersConfig config = QTiersConfig.get();
         List<Player> list = new ArrayList<>();
         for (PlayerListEntry entry : handler.getPlayerList()) {
+            // Skip a server's fake tab rows (blank names); its real players are still in the list, just unlisted
+            if (!ServerNames.isRealPlayer(entry)) continue;
             UUID uuid = entry.getProfile().id();
             List<Optional<Ranking>> tiers = new ArrayList<>();
             int best = Integer.MAX_VALUE;

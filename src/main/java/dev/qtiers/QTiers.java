@@ -83,6 +83,10 @@ public class QTiers implements ClientModInitializer {
                             pendingScreen = () -> new QTiersConfigScreen(null);
                             return 1;
                         }))
+                        .then(literal("debug").executes(ctx -> {
+                            DebugReport.run(MinecraftClient.getInstance());
+                            return 1;
+                        }))
                         .then(literal("list").executes(ctx -> {
                             pendingScreen = () -> new QTiersLobbyScreen(null);
                             return 1;
