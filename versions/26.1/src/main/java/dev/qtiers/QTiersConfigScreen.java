@@ -56,7 +56,14 @@ public class QTiersConfigScreen extends Screen {
         y = toggle(right, y, "Colored separator", config.coloredSeparator, v -> config.coloredSeparator = v, true);
         y = toggle(left, y, "Show retired", config.showRetired, v -> config.showRetired = v, false);
         y = toggle(right, y, "Own name in F5", config.showOwnNametag, v -> config.showOwnNametag = v, true);
-        y = toggle(left, y, "Opponent HUD", config.opponentHud, v -> config.opponentHud = v, false);
+        // Opponent HUD toggle shares its slot with a small "Move" button
+        addRenderableWidget(CycleButton.onOffBuilder(config.opponentHud)
+                .create(left, y, BUTTON_W - 44, BUTTON_H, Component.literal("Opponent HUD"), (b, v) -> {
+                    config.opponentHud = v;
+                    QTiersConfig.save();
+                }));
+        addRenderableWidget(Button.builder(Component.literal("Move"), b -> minecraft.setScreen(new QTiersHudEditScreen(this)))
+                .bounds(left + BUTTON_W - 42, y, 42, BUTTON_H).build());
         y = toggle(right, y, "Clickable chat names", config.clickableNames, v -> config.clickableNames = v, true);
         y += 8;
 

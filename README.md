@@ -33,7 +33,7 @@ In third person you see your own nametag with your tiers, like the WhoAmI mod.
 ![Own nametag with tiers in F5](docs/f5-own-name.png)
 
 ### Opponent HUD
-When you hit a player, a small box in the top-left corner shows their tiers on every site for 10 seconds.
+When you hit a player, a small box shows their tiers on every site for 10 seconds. Press **Move** next to "Opponent HUD" in the settings to drag it anywhere on the screen.
 
 ![Opponent HUD](docs/opponent-hud.png)
 
@@ -102,7 +102,7 @@ Set them under Options → Controls → QTiers.
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) for your Minecraft version.
-2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.5.1+1.21.11.jar`:
+2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.5.2+1.21.11.jar`:
 
    | Minecraft | Jar |
    |---|---|

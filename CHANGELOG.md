@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.5.2 (2026-10-27)
+
+### Added
+- **More Minecraft versions.** QTiers now has a jar for each of these versions:
+  - 1.21.4
+  - 1.21.6 – 1.21.8
+  - 1.21.11
+  - 26.1 – 26.1.2
+  - 26.2
+  - 26.3
+
+  Download the one for your version: the file name ends in the Minecraft version, e.g. `qtiers-1.5.2+26.3.jar`.
+- **Movable opponent HUD**: press **Move** next to "Opponent HUD" in the settings and drag the box where you want it. **Reset** puts it back in the top-left corner. The position stays the same on any resolution or GUI scale.
+
 ## 1.5.1 (2026-10-27)
 
 ### Fixed
