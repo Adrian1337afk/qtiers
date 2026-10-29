@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0 (2026-10-29)
+
+### Added
+- **MCTiers is back!** MCTiers returned at mctiers.net, so QTiers shows MCTiers ranks again, from its new official API. It covers all 9 gamemodes (Vanilla, UHC, Pot, NethPot, SMP, Sword, Axe, Mace, Spear) with MCTiers' own icons.
+- MCTiers works everywhere the other tier lists do: nametags, the tab list, your own name in F5, the profile screen, the opponent HUD, online players, leaderboards and compare. Its short label is **MCT**.
+- A keybind to cycle the MCTiers gamemode.
+
+### Changed
+- The profile screen shows the six tier lists in a 3×2 grid.
+
 ## 1.5.2 (2026-10-27)
 
 ### Added

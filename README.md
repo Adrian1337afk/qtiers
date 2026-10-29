@@ -103,7 +103,7 @@ Set them under Options → Controls → QTiers.
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) for your Minecraft version.
-2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.5.2+1.21.11.jar`:
+2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.6.0+1.21.11.jar`:
 
    | Minecraft | Jar |
    |---|---|
