@@ -56,6 +56,7 @@ public final class QTiersConfig {
 
     private static Map<TierSource, SiteSettings> defaultSites() {
         Map<TierSource, SiteSettings> map = new EnumMap<>(TierSource.class);
+        map.put(TierSource.MCTIERS, new SiteSettings(Position.RIGHT));
         map.put(TierSource.PVPTIERS, new SiteSettings(Position.LEFT));
         map.put(TierSource.SUBTIERS, new SiteSettings(Position.RIGHT));
         map.put(TierSource.MCPVP, new SiteSettings(Position.RIGHT));

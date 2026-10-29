@@ -4,10 +4,11 @@
 
 **Every PvP tier list, right next to a player's name.**
 
-QTiers is a Fabric client mod for **Minecraft 1.21.4, 1.21.8, 1.21.11, 26.1, 26.2 and 26.3**. It shows players' tier-list ranks in nametags and in the tab list, from five tier lists at once:
+QTiers is a Fabric client mod for **Minecraft 1.21.4, 1.21.8, 1.21.11, 26.1, 26.2 and 26.3**. It shows players' tier-list ranks in nametags and in the tab list, from six tier lists at once:
 
 | Tier list | Label |
 |---|---|
+| [MCTiers](https://mctiers.net) | MCT |
 | [PvPTiers](https://pvptiers.com) | PVP |
 | [SubTiers](https://subtiers.net) | SUB |
 | [MCPVP](https://www.mcpvp.com) | MC |
@@ -38,7 +39,7 @@ When you hit a player, a small box shows their tiers on every site for 10 second
 ![Opponent HUD](docs/opponent-hud.png)
 
 ### Player profiles
-`/qtiers <player>` opens a profile with a full-body skin render and every tier, peak, point total, rank and region from all five sites, plus a button to open the player's NameMC page. To open a profile you can also:
+`/qtiers <player>` opens a profile with a full-body skin render and every tier, peak, point total, rank and region from all six sites, plus a button to open the player's NameMC page. To open a profile you can also:
 - press **H** for the player nearest to you,
 - click a player's name in chat,
 - type a name into the search box on the profile or settings screen and press Enter.
@@ -49,7 +50,7 @@ When you hit a player, a small box shows their tiers on every site for 10 second
 ![Online players](docs/online-players.png)
 
 ### Leaderboards
-`/qtiers top` shows the top players of **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
+`/qtiers top` shows the top players of **MCTiers**, **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
 
 ![PvPTiers overall leaderboard](docs/leaderboard.png)
 
@@ -71,7 +72,7 @@ Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Men
 | Enabled | Turns QTiers on or off |
 | Gamemode icons | Shows the gamemode icon in front of each tier |
 | Nametags / Tab list | Where tiers are shown |
-| Site labels | Adds PVP / SUB / MC / HQ / TMC in front of each tier |
+| Site labels | Adds MCT / PVP / SUB / MC / HQ / TMC in front of each tier |
 | Colored separator | The `\|` next to the name takes the tier's color |
 | Show retired | Includes retired tiers |
 | Own name in F5 | Shows your own nametag in third person |
@@ -96,7 +97,7 @@ Set them under Options → Controls → QTiers.
 | Open nearest player's profile | H |
 | Open online players | unbound |
 | Open leaderboards | unbound |
-| Cycle the PvPTiers / SubTiers / MCPVP / PVPHQ / TierMC gamemode | unbound |
+| Cycle the MCTiers / PvPTiers / SubTiers / MCPVP / PVPHQ / TierMC gamemode | unbound |
 | Toggle QTiers | unbound |
 | Open settings | unbound |
 
@@ -123,7 +124,7 @@ gradlew collectJars
 One jar per Minecraft version ends up in `build/libs/`. Shared code lives in `common/`; each version's Minecraft-facing code is in `versions/<minecraft>/`.
 
 ## Credits
-- **Tier data:** the [PvPTiers](https://pvptiers.com), [SubTiers](https://subtiers.net), [PVPHQ](https://pvphq.com) and [TierMC](https://tiermc.com/api.html) APIs, and public [MCPVP](https://www.mcpvp.com) profile pages (MCPVP has no API).
+- **Tier data:** the [MCTiers](https://mctiers.net/docs/v2), [PvPTiers](https://pvptiers.com), [SubTiers](https://subtiers.net), [PVPHQ](https://pvphq.com) and [TierMC](https://tiermc.com/api.html) APIs, and public [MCPVP](https://www.mcpvp.com) profile pages (MCPVP has no API).
 - **Gamemode icons:** each tier list's own website. They belong to those sites.
 - **Tier colors:** mcpvp.com.
 - **Skin renders:** [Visage](https://visage.surgeplay.com), with [mc-heads](https://mc-heads.net) as the fallback.

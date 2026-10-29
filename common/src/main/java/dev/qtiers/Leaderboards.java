@@ -18,7 +18,7 @@ final class Leaderboards {
     private Leaderboards() {}
 
     static final String OVERALL = "overall";
-    static final List<TierSource> SITES = List.of(TierSource.PVPTIERS, TierSource.SUBTIERS, TierSource.TIERMC);
+    static final List<TierSource> SITES = List.of(TierSource.MCTIERS, TierSource.PVPTIERS, TierSource.SUBTIERS, TierSource.TIERMC);
     private static final int PER_TIER = 25;
 
     /** One leaderboard line. {@code label} is a tier (e.g. HT2) or "#3"; {@code extra} is e.g. "245 pts". */
@@ -28,6 +28,7 @@ final class Leaderboards {
         boolean overall = OVERALL.equals(mode);
         String url = switch (site) {
             case PVPTIERS -> "https://pvptiers.com/api/tier/" + mode + "?count=" + (overall ? 100 : PER_TIER) + "&from=0";
+            case MCTIERS -> "https://mctiers.net/api/v2/mode/" + mode + "?count=" + (overall ? 50 : PER_TIER) + "&from=0";
             case SUBTIERS -> "https://subtiers.net/api/v2/mode/" + mode + "?count=" + (overall ? 50 : PER_TIER) + "&from=0";
             case TIERMC -> "https://tiermc.com/api/v2/mode/" + mode + "?count=" + (overall ? 50 : PER_TIER) + "&from=0";
             default -> throw new IllegalArgumentException(site + " has no leaderboard");

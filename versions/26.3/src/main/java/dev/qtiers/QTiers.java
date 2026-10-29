@@ -54,6 +54,7 @@ public class QTiers implements ClientModInitializer {
         TierApi.startDiskCache();
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> TierApi.flushDiskCache());
 
+        CYCLE_KEYS.put(TierSource.MCTIERS, key("cycle_mctiers", InputConstants.UNKNOWN.getValue()));
         CYCLE_KEYS.put(TierSource.PVPTIERS, key("cycle_pvptiers", InputConstants.UNKNOWN.getValue()));
         CYCLE_KEYS.put(TierSource.SUBTIERS, key("cycle_subtiers", InputConstants.UNKNOWN.getValue()));
         CYCLE_KEYS.put(TierSource.MCPVP, key("cycle_mcpvp", InputConstants.UNKNOWN.getValue()));
