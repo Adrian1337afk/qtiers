@@ -1,10 +1,10 @@
-<img src="src/main/resources/assets/qtiers/icon.png" width="96" align="right" alt="QTiers logo">
+<img src="common/src/main/resources/assets/qtiers/icon.png" width="96" align="right" alt="QTiers logo">
 
 # QTiers
 
 **Every PvP tier list, right next to a player's name.**
 
-QTiers is a Fabric client mod for **Minecraft 1.21.4, 1.21.8, 1.21.11, 26.1, 26.2 and 26.3**. It shows players' tier-list ranks in nametags and in the tab list, from six tier lists at once:
+QTiers is a Fabric client mod that shows players' tier-list ranks in nametags and in the tab list. It covers six tier lists at once:
 
 | Tier list | Label |
 |---|---|
@@ -15,7 +15,9 @@ QTiers is a Fabric client mod for **Minecraft 1.21.4, 1.21.8, 1.21.11, 26.1, 26.
 | [PVPHQ](https://pvphq.com) | HQ |
 | [TierMC](https://tiermc.com) | TMC |
 
-It works like TierTagger, but covers every site, and each site keeps its own icons. It runs only on your client, so it works on any server.
+It works like TierTagger, but covers every site, and each site keeps its own icons. It runs only on your client, so it works on any server, including ones with custom nametags like mcpvp.club.
+
+**Minecraft versions:** 1.21.4, 1.21.6 – 1.21.8, 1.21.11, 26.1 – 26.1.2, 26.2 and 26.3.
 
 ![Profile screen for qdran](profile-screen.png)
 
@@ -34,9 +36,13 @@ In third person you see your own nametag with your tiers, like the WhoAmI mod.
 ![Own nametag with tiers in F5](docs/f5-own-name.png)
 
 ### Opponent HUD
-When you hit a player, a small box shows their tiers on every site for 10 seconds. Press **Move** next to "Opponent HUD" in the settings to drag it anywhere on the screen.
+When you hit a player, a small box shows their tiers on every site for 10 seconds.
 
 ![Opponent HUD](docs/opponent-hud.png)
+
+Press **Move** next to "Opponent HUD" in the settings to drag the box anywhere on the screen. It stays in the same spot on any resolution or GUI scale.
+
+![Moving the opponent HUD](docs/move-hud.png)
 
 ### Player profiles
 `/qtiers <player>` opens a profile with a full-body skin render and every tier, peak, point total, rank and region from all six sites, plus a button to open the player's NameMC page. To open a profile you can also:
@@ -50,9 +56,9 @@ When you hit a player, a small box shows their tiers on every site for 10 second
 ![Online players](docs/online-players.png)
 
 ### Leaderboards
-`/qtiers top` shows the top players of **MCTiers**, **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
+`/qtiers top` shows the top players of **MCTiers**, **PvPTiers**, **SubTiers** or **TierMC**, overall or for one gamemode. Click a name to open their profile. PVPHQ and MCPVP have no public leaderboard, so they aren't included.
 
-![PvPTiers overall leaderboard](docs/leaderboard.png)
+![MCTiers overall leaderboard](docs/leaderboard.png)
 
 ### Compare players
 `/qtiers compare <player1> <player2>` puts two players side by side, site by site. When both are ranked in a gamemode, the better tier gets a ▲.
@@ -76,7 +82,7 @@ Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Men
 | Colored separator | The `\|` next to the name takes the tier's color |
 | Show retired | Includes retired tiers |
 | Own name in F5 | Shows your own nametag in third person |
-| Opponent HUD | Shows the tiers of the last player you hit |
+| Opponent HUD | Shows the tiers of the last player you hit; **Move** places it |
 | Clickable chat names | Clicking a name in chat opens that player's profile |
 
 ## Commands
@@ -88,6 +94,7 @@ Open the settings with `/qtiers`, a keybind, or the Configure button in [Mod Men
 | `/qtiers compare <a> <b>` | Compares two players |
 | `/qtiers` or `/qtiers settings` | Opens the settings |
 | `/qtiers reload` | Reloads the config and fetches tiers again |
+| `/qtiers debug` | Writes what the server sends for names and the tab list to the log, for servers where tiers don't show |
 
 ## Keybinds
 Set them under Options → Controls → QTiers.
@@ -103,16 +110,16 @@ Set them under Options → Controls → QTiers.
 
 ## Install
 1. Install [Fabric Loader](https://fabricmc.net/use/) for your Minecraft version.
-2. Download the jar for your version from the [releases page](https://github.com/Adrian1337afk/qtiers/releases), e.g. `qtiers-1.6.0+1.21.11.jar`:
+2. Download the jar for your version from the [latest release](https://github.com/Adrian1337afk/qtiers/releases/latest):
 
    | Minecraft | Jar |
    |---|---|
-   | 1.21.4 | `qtiers-<version>+1.21.4.jar` |
-   | 1.21.6 – 1.21.8 | `qtiers-<version>+1.21.8.jar` |
-   | 1.21.11 | `qtiers-<version>+1.21.11.jar` |
-   | 26.1 – 26.1.2 | `qtiers-<version>+26.1.jar` |
-   | 26.2 | `qtiers-<version>+26.2.jar` |
-   | 26.3 | `qtiers-<version>+26.3.jar` |
+   | 1.21.4 | `qtiers-1.6.0+1.21.4.jar` |
+   | 1.21.6 – 1.21.8 | `qtiers-1.6.0+1.21.8.jar` |
+   | 1.21.11 | `qtiers-1.6.0+1.21.11.jar` |
+   | 26.1 – 26.1.2 | `qtiers-1.6.0+26.1.jar` |
+   | 26.2 | `qtiers-1.6.0+26.2.jar` |
+   | 26.3 | `qtiers-1.6.0+26.3.jar` |
 
 3. Put it and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
 4. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
@@ -121,7 +128,7 @@ Set them under Options → Controls → QTiers.
 ```
 gradlew collectJars
 ```
-One jar per Minecraft version ends up in `build/libs/`. Shared code lives in `common/`; each version's Minecraft-facing code is in `versions/<minecraft>/`.
+One jar per Minecraft version ends up in `build/libs/`. Shared code (APIs, parsers, config, cache) lives in `common/`; each version's Minecraft-facing code is in `versions/<minecraft>/`.
 
 ## Credits
 - **Tier data:** the [MCTiers](https://mctiers.net/docs/v2), [PvPTiers](https://pvptiers.com), [SubTiers](https://subtiers.net), [PVPHQ](https://pvphq.com) and [TierMC](https://tiermc.com/api.html) APIs, and public [MCPVP](https://www.mcpvp.com) profile pages (MCPVP has no API).
