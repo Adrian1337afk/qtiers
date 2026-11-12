@@ -130,6 +130,9 @@ gradlew collectJars
 ```
 One jar per Minecraft version ends up in `build/libs/`. Shared code (APIs, parsers, config, cache) lives in `common/`; each version's Minecraft-facing code is in `versions/<minecraft>/`.
 
+## Support
+If you like QTiers, you can support its development on [GoFundMe](https://gofund.me/a3efe3c0c).
+
 ## Credits
 - **Tier data:** the [MCTiers](https://mctiers.net/docs/v2), [PvPTiers](https://pvptiers.com), [SubTiers](https://subtiers.net), [PVPHQ](https://pvphq.com) and [TierMC](https://tiermc.com/api.html) APIs, and public [MCPVP](https://www.mcpvp.com) profile pages (MCPVP has no API).
 - **Gamemode icons:** each tier list's own website. They belong to those sites.
