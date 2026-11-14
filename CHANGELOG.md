@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.6.1 (2026-11-14)
+
+### Added
+- **New settings screen (1.21.11).** A redesigned settings window with a sidebar and pages for General, Tier lists, Nametags, Opponent HUD and Theme. Settings are cards with switches, sliders, color swatches and pickers. The Nametags and Opponent HUD pages show a live preview.
+- **Theme (1.21.11):** Dark, Midnight or Light style, 10 accent colors and a corner roundness slider. The profile, online players, leaderboard, compare and HUD-move screens use the same theme.
+- **Opponent HUD styling (1.21.11):** scale (0.5× to 2×), background color and opacity, accent border, accent-colored name, text shadow, and showing or hiding gamemode names.
+- **Nametag styling (1.21.11):** separator (`|` `•` `»` `-` `/` `┃` or none), bold tiers, `[HT3]` brackets and nametag height.
+
+### Changed
+- New QTiers icon (all versions).
+- The separate Tiers screen is now the Tier lists page in the settings (1.21.11).
+
+The redesign is on 1.21.11 for now. The other versions get the new icon and will get the redesign in a later update.
+
 ## 1.6.0 (2026-10-29)
 
 ### Added

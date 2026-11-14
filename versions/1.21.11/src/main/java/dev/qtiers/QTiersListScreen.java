@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,7 @@ abstract class QTiersListScreen extends Screen {
     }
 
     protected int listBottom() {
-        return height - 34;
+        return height - 40;
     }
 
     protected abstract int rowCount();
@@ -41,6 +40,23 @@ abstract class QTiersListScreen extends Screen {
     /** Shown in place of the rows when there are none (e.g. "Loading..."). */
     protected Text emptyText() {
         return Text.literal("Nothing to show");
+    }
+
+    /** Theme colors for rows: normal, secondary and faint text, and hovered names. */
+    protected static int textColor() {
+        return Theme.palette().text();
+    }
+
+    protected static int dimColor() {
+        return Theme.palette().textDim();
+    }
+
+    protected static int mutedColor() {
+        return Theme.palette().textMuted();
+    }
+
+    protected static int hoverColor() {
+        return Theme.accent();
     }
 
     protected boolean rowClicked(int index) {
@@ -57,8 +73,7 @@ abstract class QTiersListScreen extends Screen {
 
     @Override
     protected void init() {
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(width / 2 - 100, height - 27, 200, 20).build());
+        addDrawableChild(Ui.primary(width / 2 - 100, height - 30, 200, 20, Text.translatable("gui.done"), b -> close()));
     }
 
     private int maxScroll() {
@@ -67,13 +82,14 @@ abstract class QTiersListScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        super.render(context, mouseX, mouseY, deltaTicks);
-        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, 10, 0xFFFFFFFF);
+        Theme.Palette p = Theme.palette();
         int x = listX(), w = listWidth(), top = listTop(), bottom = listBottom();
+        Ui.window(context, x - 10, 4, w + 20, height - 8, title);
+        super.render(context, mouseX, mouseY, deltaTicks);
         renderHeader(context, x, top - 12, w);
-        context.fill(x - 2, top - 2, x + w + 2, bottom + 2, 0x60000000);
+        Ui.rect(context, x - 3, top - 3, w + 6, bottom - top + 6, Theme.radius(), p.card());
         if (rowCount() == 0) {
-            context.drawCenteredTextWithShadow(textRenderer, emptyText(), width / 2, top + 10, 0xFFAAAAAA);
+            Ui.centered(context, emptyText(), width / 2, top + 10, p.textDim());
             return;
         }
         scroll = Math.max(0, Math.min(scroll, maxScroll()));
@@ -83,7 +99,7 @@ abstract class QTiersListScreen extends Screen {
             int y = top + i * ROW_H - (int) scroll;
             if (y > bottom) break;
             boolean hovered = mouseX >= x && mouseX < x + w && mouseY >= Math.max(y, top) && mouseY < Math.min(y + ROW_H, bottom);
-            if (hovered) context.fill(x - 2, y, x + w + 2, y + ROW_H, 0x30FFFFFF);
+            if (hovered) context.fill(x - 2, y, x + w + 2, y + ROW_H, Theme.alpha(Theme.accent(), 0x30));
             renderRow(context, i, x, y + 2, w, hovered);
         }
         context.disableScissor();
@@ -92,7 +108,7 @@ abstract class QTiersListScreen extends Screen {
             int track = bottom - top;
             int thumb = Math.max(10, track * track / (rowCount() * ROW_H));
             int thumbY = top + (int) ((track - thumb) * scroll / maxScroll());
-            context.fill(x + w + 3, thumbY, x + w + 5, thumbY + thumb, 0xA0FFFFFF);
+            Ui.rect(context, x + w + 4, thumbY, 3, thumb, 1, p.textMuted());
         }
     }
 
@@ -120,12 +136,7 @@ abstract class QTiersListScreen extends Screen {
 
     /** Draws text cut to fit {@code maxWidth}, so long names don't run into the next column. */
     protected void drawClipped(DrawContext context, Text text, int x, int y, int maxWidth, int color) {
-        if (textRenderer.getWidth(text) <= maxWidth) {
-            context.drawTextWithShadow(textRenderer, text, x, y, color);
-        } else {
-            String s = textRenderer.trimToWidth(text.getString(), maxWidth - textRenderer.getWidth("…")) + "…";
-            context.drawTextWithShadow(textRenderer, Text.literal(s).setStyle(text.getStyle()), x, y, color);
-        }
+        Ui.clipped(context, text, x, y, maxWidth, color);
     }
 
     @Override

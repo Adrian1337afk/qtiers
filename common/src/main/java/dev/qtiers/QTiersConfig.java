@@ -17,6 +17,12 @@ public final class QTiersConfig {
     /** Same options as TierTagger: when to fall back to (or force) the player's highest tier. */
     public enum HighestMode { NEVER, NOT_FOUND, ALWAYS }
 
+    /** Color scheme of the QTiers screens. */
+    public enum UiStyle { DARK, MIDNIGHT, LIGHT }
+
+    /** Separators that can go between the name and the tiers. */
+    public static final java.util.List<String> SEPARATORS = java.util.List.of("|", "•", "»", "-", "/", "┃", "");
+
 
     public static final class SiteSettings {
         public Position position;
@@ -51,6 +57,31 @@ public final class QTiersConfig {
     /** Online players' names in chat open their profile when clicked. */
     public boolean clickableNames = true;
     public HighestMode highestMode = HighestMode.NOT_FOUND;
+
+    // Theme
+    public UiStyle uiStyle = UiStyle.DARK;
+    /** Accent color (RGB) for switches, sliders and highlights. */
+    public int accentColor = 0x4F8CFF;
+    /** Corner roundness of panels, buttons and the opponent HUD, 0 = square. */
+    public int cornerRadius = 4;
+
+    // Opponent HUD style
+    public double hudScale = 1.0;
+    /** HUD background color (RGB) and its opacity in percent. */
+    public int hudBackground = 0x000000;
+    public int hudOpacity = 56;
+    public boolean hudBorder = false;
+    public boolean hudShadow = true;
+    public boolean hudAccentTitle = false;
+    public boolean hudModeNames = true;
+
+    // Nametag style
+    /** Character between the name and the tiers; empty = just a space. */
+    public String separator = "|";
+    public boolean boldTiers = false;
+    public boolean tierBrackets = false;
+    /** How far nametags are raised above vanilla's spot, in blocks. */
+    public double nametagHeight = 0.2;
 
     public Map<TierSource, SiteSettings> sites = defaultSites();
 
@@ -89,6 +120,14 @@ public final class QTiersConfig {
     /** Fills anything missing or invalid after loading an older/hand-edited file. */
     private void repair() {
         if (highestMode == null) highestMode = HighestMode.NOT_FOUND;
+        if (uiStyle == null) uiStyle = UiStyle.DARK;
+        if (separator == null || !SEPARATORS.contains(separator)) separator = "|";
+        accentColor &= 0xFFFFFF;
+        hudBackground &= 0xFFFFFF;
+        cornerRadius = Math.max(0, Math.min(6, cornerRadius));
+        hudOpacity = Math.max(0, Math.min(100, hudOpacity));
+        hudScale = Double.isFinite(hudScale) ? Math.max(0.5, Math.min(2.0, hudScale)) : 1.0;
+        nametagHeight = Double.isFinite(nametagHeight) ? Math.max(0, Math.min(1.0, nametagHeight)) : 0.2;
         Map<TierSource, SiteSettings> defaults = defaultSites();
         Map<TierSource, SiteSettings> fixed = new EnumMap<>(TierSource.class);
         for (TierSource source : TierSource.values()) {

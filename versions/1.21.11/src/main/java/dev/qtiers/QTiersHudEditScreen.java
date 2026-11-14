@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -26,12 +25,11 @@ public class QTiersHudEditScreen extends Screen {
     @Override
     protected void init() {
         int y = height - 28;
-        addDrawableChild(ButtonWidget.builder(Text.literal("Reset"), b -> {
+        addDrawableChild(Ui.button(width / 2 - 102, y, 100, 20, "Reset", b -> {
             QTiersConfig.get().opponentHudX = 0;
             QTiersConfig.get().opponentHudY = 0;
-        }).dimensions(width / 2 - 102, y, 100, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(width / 2 + 2, y, 100, 20).build());
+        }));
+        addDrawableChild(Ui.primary(width / 2 + 2, y, 100, 20, Text.translatable("gui.done"), b -> close()));
     }
 
     private OpponentHud.Box previewBox() {
@@ -53,13 +51,14 @@ public class QTiersHudEditScreen extends Screen {
         int[] pos = OpponentHud.position(box, width, height);
         OpponentHud.draw(context, box, pos[0], pos[1]);
         boolean hover = dragging || inside(box, pos, mouseX, mouseY);
-        context.drawStrokedRectangle(pos[0] - 1, pos[1] - 1, box.width() + 2, box.height() + 2, hover ? 0xFFFFFF55 : 0x80FFFFFF);
+        Ui.outline(context, pos[0] - 2, pos[1] - 2, OpponentHud.scaledWidth(box) + 4, OpponentHud.scaledHeight(box) + 4,
+                Theme.radius() + 2, hover ? Theme.accent() : 0x80FFFFFF);
         context.drawCenteredTextWithShadow(textRenderer, Text.literal("Drag the box to move the opponent HUD").formatted(Formatting.GRAY),
                 width / 2, height - 42, 0xFFFFFFFF);
     }
 
     private static boolean inside(OpponentHud.Box box, int[] pos, double mx, double my) {
-        return mx >= pos[0] && mx < pos[0] + box.width() && my >= pos[1] && my < pos[1] + box.height();
+        return mx >= pos[0] && mx < pos[0] + OpponentHud.scaledWidth(box) && my >= pos[1] && my < pos[1] + OpponentHud.scaledHeight(box);
     }
 
     @Override
@@ -80,8 +79,8 @@ public class QTiersHudEditScreen extends Screen {
     public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (!dragging) return super.mouseDragged(click, offsetX, offsetY);
         OpponentHud.Box box = previewBox();
-        int freeX = Math.max(1, width - box.width() - 2 * OpponentHud.MARGIN);
-        int freeY = Math.max(1, height - box.height() - 2 * OpponentHud.MARGIN);
+        int freeX = Math.max(1, width - OpponentHud.scaledWidth(box) - 2 * OpponentHud.MARGIN);
+        int freeY = Math.max(1, height - OpponentHud.scaledHeight(box) - 2 * OpponentHud.MARGIN);
         QTiersConfig config = QTiersConfig.get();
         config.opponentHudX = OpponentHud.clamp((click.x() - grabX - OpponentHud.MARGIN) / freeX);
         config.opponentHudY = OpponentHud.clamp((click.y() - grabY - OpponentHud.MARGIN) / freeY);

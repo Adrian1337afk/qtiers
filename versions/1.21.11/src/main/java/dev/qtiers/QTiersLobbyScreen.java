@@ -78,19 +78,19 @@ public class QTiersLobbyScreen extends QTiersListScreen {
 
     @Override
     protected void renderHeader(DrawContext context, int x, int y, int width) {
-        context.drawTextWithShadow(textRenderer, Text.literal(players.size() + " online"), x, y, 0xFFAAAAAA);
+        Ui.text(context, Text.literal(players.size() + " online"), x, y, dimColor());
         int col = columnWidth(width);
         TierSource[] sources = TierSource.values();
         for (int i = 0; i < sources.length; i++) {
             TierSource s = sources[i];
-            drawClipped(context, Text.literal(s.displayName).styled(st -> st.withColor(s.color)), x + NAME_W + i * col, y, col - 4, 0xFFFFFFFF);
+            drawClipped(context, Text.literal(s.displayName).styled(st -> st.withColor(s.color)), x + NAME_W + i * col, y, col - 4, textColor());
         }
     }
 
     @Override
     protected void renderRow(DrawContext context, int index, int x, int y, int width, boolean hovered) {
         Player p = players.get(index);
-        drawClipped(context, Text.literal(p.name()), x, y, NAME_W - 6, hovered ? 0xFFFFFF55 : 0xFFFFFFFF);
+        drawClipped(context, Text.literal(p.name()), x, y, NAME_W - 6, hovered ? hoverColor() : textColor());
         int col = columnWidth(width);
         TierSource[] sources = TierSource.values();
         for (int i = 0; i < sources.length; i++) {
@@ -105,7 +105,7 @@ public class QTiersLobbyScreen extends QTiersListScreen {
             } else {
                 cell = Text.literal("-").styled(s -> s.withColor(0x555555));
             }
-            context.drawTextWithShadow(textRenderer, cell, x + NAME_W + i * col, y, 0xFFFFFFFF);
+            Ui.text(context, cell, x + NAME_W + i * col, y, textColor());
         }
     }
 

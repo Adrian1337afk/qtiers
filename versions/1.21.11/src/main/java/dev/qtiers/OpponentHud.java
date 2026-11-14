@@ -61,8 +61,10 @@ public final class OpponentHud {
             Ranking r = ranking.get();
             MutableText line = Text.literal(source.shortName + " ").styled(s -> s.withColor(source.color));
             if (config.showIcons) line.append(ModeTexts.icon(source, r.mode()));
-            line.append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
-                    .append(Text.literal(" " + GameModes.get(r.mode()).title()).styled(s -> s.withColor(0xBBBBBB)));
+            line.append(Text.literal(r.label()).styled(s -> s.withColor(r.color())));
+            if (config.hudModeNames) {
+                line.append(Text.literal(" " + GameModes.get(r.mode()).title()).styled(s -> s.withColor(darkText() ? 0x555555 : 0xBBBBBB)));
+            }
             lines.add(line);
         }
         Text title = Text.literal(name).styled(s -> s.withBold(true));
@@ -74,11 +76,25 @@ public final class OpponentHud {
         return new Box(title, lines, w + 8, 14 + lines.size() * 10);
     }
 
+    static int scaledWidth(Box box) {
+        return (int) Math.ceil(box.width() * QTiersConfig.get().hudScale);
+    }
+
+    static int scaledHeight(Box box) {
+        return (int) Math.ceil(box.height() * QTiersConfig.get().hudScale);
+    }
+
+    /** True when the chosen background is light enough that the text has to be dark. */
+    private static boolean darkText() {
+        QTiersConfig config = QTiersConfig.get();
+        return config.hudOpacity >= 50 && Theme.luminance(config.hudBackground) > 0.6;
+    }
+
     /** Top-left corner of the box from the saved position, kept fully on screen. */
     static int[] position(Box box, int screenWidth, int screenHeight) {
         QTiersConfig config = QTiersConfig.get();
-        int freeX = Math.max(0, screenWidth - box.width() - 2 * MARGIN);
-        int freeY = Math.max(0, screenHeight - box.height() - 2 * MARGIN);
+        int freeX = Math.max(0, screenWidth - scaledWidth(box) - 2 * MARGIN);
+        int freeY = Math.max(0, screenHeight - scaledHeight(box) - 2 * MARGIN);
         int x = MARGIN + (int) Math.round(clamp(config.opponentHudX) * freeX);
         int y = MARGIN + (int) Math.round(clamp(config.opponentHudY) * freeY);
         return new int[]{x, y};
@@ -88,14 +104,27 @@ public final class OpponentHud {
         return Math.max(0, Math.min(1, v));
     }
 
+    /** Draws the box at x, y in the configured scale and style. */
     static void draw(DrawContext context, Box box, int x, int y) {
+        QTiersConfig config = QTiersConfig.get();
         var tr = MinecraftClient.getInstance().textRenderer;
-        context.fill(x, y, x + box.width(), y + box.height(), 0x90000000);
-        context.drawTextWithShadow(tr, box.title(), x + 4, y + 3, 0xFFFFFFFF);
-        int ly = y + 15;
+        float scale = (float) config.hudScale;
+        var matrices = context.getMatrices();
+        matrices.pushMatrix();
+        matrices.translate(x, y);
+        matrices.scale(scale, scale);
+
+        int radius = Theme.radius();
+        Ui.rect(context, 0, 0, box.width(), box.height(), radius, Theme.alpha(config.hudBackground, config.hudOpacity * 255 / 100));
+        if (config.hudBorder) Ui.outline(context, 0, 0, box.width(), box.height(), radius, Theme.accent());
+        int textColor = darkText() ? 0xFF111111 : 0xFFFFFFFF;
+        int titleColor = config.hudAccentTitle ? Theme.accent() : textColor;
+        context.drawText(tr, box.title(), 4, 3, titleColor, config.hudShadow);
+        int ly = 15;
         for (Text line : box.lines()) {
-            context.drawTextWithShadow(tr, line, x + 4, ly, 0xFFFFFFFF);
+            context.drawText(tr, line, 4, ly, textColor, config.hudShadow);
             ly += 10;
         }
+        matrices.popMatrix();
     }
 }

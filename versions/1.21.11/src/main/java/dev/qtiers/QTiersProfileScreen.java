@@ -121,26 +121,23 @@ public class QTiersProfileScreen extends Screen {
 
     @Override
     protected void init() {
-        int y = height - 28;
+        int y = height - 32;
         // Bottom-left search box: type a name, press Enter to look that player up
-        search = addDrawableChild(searchField(textRenderer, 10, y, SEARCH_W, search));
+        search = addDrawableChild(Ui.searchField(textRenderer, 12, y, SEARCH_W, search));
 
         // Buttons stay centred unless that would cover the search box; then they shrink to fit beside it
         int buttonW = 100;
         int startX = width / 2 - 154;
-        int minX = 10 + SEARCH_W + 6;
+        int minX = 12 + SEARCH_W + 6;
         if (startX < minX) {
             buttonW = Math.min(100, (width - minX - 10 - 8) / 3);
             startX = minX;
         }
-        addDrawableChild(ButtonWidget.builder(Text.literal("NameMC"),
-                        b -> ConfirmLinkScreen.open(this, "https://namemc.com/profile/" + playerId, true))
-                .dimensions(startX, y, buttonW, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
-                .dimensions(startX + buttonW + 4, y, buttonW, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Settings"),
-                        b -> client.setScreen(new QTiersConfigScreen(this)))
-                .dimensions(startX + 2 * (buttonW + 4), y, buttonW, 20).build());
+        addDrawableChild(Ui.button(startX, y, buttonW, 20, "NameMC",
+                b -> ConfirmLinkScreen.open(this, "https://namemc.com/profile/" + playerId, true)));
+        addDrawableChild(Ui.primary(startX + buttonW + 4, y, buttonW, 20, Text.translatable("gui.done"), b -> close()));
+        addDrawableChild(Ui.button(startX + 2 * (buttonW + 4), y, buttonW, 20, "Settings",
+                b -> client.setScreen(new QTiersConfigScreen(this))));
     }
 
     @Override
@@ -155,16 +152,6 @@ public class QTiersProfileScreen extends Screen {
         return super.keyPressed(input);
     }
 
-    /** The "Search player..." box, shared with the settings screen. Keeps typed text across resizes. */
-    static TextFieldWidget searchField(TextRenderer textRenderer, int x, int y, int width, TextFieldWidget previous) {
-        TextFieldWidget field = new TextFieldWidget(textRenderer, x, y, width, 20, Text.literal("Search player"));
-        field.setMaxLength(16);
-        field.setTextPredicate(t -> t.matches("[A-Za-z0-9_]*"));
-        field.setPlaceholder(Text.literal("Search player...").formatted(Formatting.DARK_GRAY));
-        if (previous != null) field.setText(previous.getText());
-        return field;
-    }
-
     /** True when Enter was pressed in the search box with a name long enough to look up. */
     static boolean searchEntered(TextFieldWidget field, KeyInput input) {
         return input.isEnter() && field != null && field.isFocused() && field.getText().length() >= 3;
@@ -172,22 +159,23 @@ public class QTiersProfileScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        Theme.Palette pal = Theme.palette();
+        Ui.window(context, 4, 4, width - 8, height - 8, Text.literal(displayName));
+        Ui.searchBox(context, search, 12, height - 32, SEARCH_W);
         super.render(context, mouseX, mouseY, deltaTicks);
 
-        context.drawCenteredTextWithShadow(textRenderer,
-                Text.literal(displayName).formatted(Formatting.BOLD), width / 2, 12, 0xFFFFFFFF);
-
         int top = 32;
-        int bottom = height - 36;
+        int bottom = height - 40;
         int skinPanel = Math.max(90, width / 4);
-        renderSkin(context, 10, top, skinPanel - 10, bottom - top);
+        Ui.rect(context, 12, top - 2, skinPanel - 14, bottom - top + 2, Theme.radius(), pal.card());
+        renderSkin(context, 12, top + 4, skinPanel - 14, bottom - top - 8);
 
         // Sites in a grid (4 sites = 2x2, 5+ = 3 columns), each panel getting an equal share of the height
         TierSource[] sources = TierSource.values();
         int gridX = skinPanel + 10;
         int cols = sources.length > 4 ? 3 : 2;
         int rows = (sources.length + cols - 1) / cols;
-        int cellW = (width - gridX - 10) / cols;
+        int cellW = (width - gridX - 12) / cols;
         int cellH = (bottom - top) / rows;
         for (int i = 0; i < sources.length; i++) {
             renderPanel(context, sources[i], gridX + (i % cols) * cellW, top + (i / cols) * cellH, cellW, cellH - 4);
@@ -197,10 +185,8 @@ public class QTiersProfileScreen extends Screen {
     private void renderSkin(DrawContext context, int x, int y, int w, int h) {
         int centerX = x + w / 2;
         switch (skinState) {
-            case LOADING -> context.drawCenteredTextWithShadow(textRenderer,
-                    Text.literal("Loading skin..."), centerX, y + h / 2, 0xFFAAAAAA);
-            case FAILED -> context.drawCenteredTextWithShadow(textRenderer,
-                    Text.literal("Skin unavailable"), centerX, y + h / 2, 0xFFFF5555);
+            case LOADING -> Ui.centered(context, Text.literal("Loading skin..."), centerX, y + h / 2, Theme.palette().textDim());
+            case FAILED -> Ui.centered(context, Text.literal("Skin unavailable"), centerX, y + h / 2, 0xFFEF4444);
             case LOADED -> {
                 float scale = Math.min((float) w / skinWidth, (float) h / skinHeight);
                 int drawW = Math.round(skinWidth * scale);
@@ -213,21 +199,23 @@ public class QTiersProfileScreen extends Screen {
 
     /** One site's panel: header, stats line, then as many rankings as fit in {@code h}. */
     private void renderPanel(DrawContext context, TierSource source, int x, int y, int w, int h) {
-        context.fill(x + 2, y - 2, x + w - 2, y + 22, 0x40000000 | (source.color & 0xFFFFFF));
-        context.drawTextWithShadow(textRenderer,
-                Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), x + 6, y + 1, 0xFFFFFFFF);
+        Theme.Palette pal = Theme.palette();
+        Ui.rect(context, x + 2, y - 2, w - 4, h + 2, Theme.radius(), pal.card());
+        Ui.rect(context, x + 2, y - 2, w - 4, 24, Theme.radius(), Theme.alpha(source.color, 0x30));
+        Ui.rect(context, x + 2, y + 2, 3, 16, 1, 0xFF000000 | source.color);
+        Ui.text(context, Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), x + 9, y + 1, pal.text());
 
         if (failedSites.contains(source)) {
-            context.drawTextWithShadow(textRenderer, Text.literal("Couldn't load"), x + 6, y + 12, 0xFFFF7777);
+            Ui.text(context, Text.literal("Couldn't load"), x + 9, y + 12, 0xFFEF4444);
             return;
         }
         Optional<TierProfile> profile = profiles.get(source);
         if (profile == null) {
-            context.drawTextWithShadow(textRenderer, Text.literal("Loading..."), x + 6, y + 12, 0xFFAAAAAA);
+            Ui.text(context, Text.literal("Loading..."), x + 9, y + 12, pal.textDim());
             return;
         }
         if (profile.isEmpty() || !profile.get().isRanked()) {
-            context.drawTextWithShadow(textRenderer, Text.literal("Not ranked"), x + 6, y + 12, 0xFF888888);
+            Ui.text(context, Text.literal("Not ranked"), x + 9, y + 12, pal.textMuted());
             return;
         }
         TierProfile p = profile.get();
@@ -236,22 +224,22 @@ public class QTiersProfileScreen extends Screen {
         while (textRenderer.getWidth(stats) > w - 10 && stats.contains(" · ")) stats = stats.substring(0, stats.lastIndexOf(" · "));
         // Region is the least important part; drop it rather than run into the next panel
         if (!p.region().isEmpty() && textRenderer.getWidth(stats + " · " + p.region()) <= w - 10) stats += " · " + p.region();
-        context.drawTextWithShadow(textRenderer, Text.literal(stats), x + 6, y + 12, 0xFFAAAAAA);
+        Ui.text(context, Text.literal(stats), x + 9, y + 12, pal.textDim());
 
         int rowY = y + 28;
         List<Ranking> rankings = p.rankings().values().stream().sorted(Comparator.comparingInt(Ranking::score)).toList();
         int fits = Math.max(1, (y + h - rowY) / ROW_H);
         if (rankings.size() > fits) {
             // Keep the best ones and say how many are hidden
-            context.drawTextWithShadow(textRenderer, Text.literal("+" + (rankings.size() - fits + 1) + " more"),
-                    x + 6, rowY + (fits - 1) * ROW_H, 0xFF888888);
+            Ui.text(context, Text.literal("+" + (rankings.size() - fits + 1) + " more"),
+                    x + 9, rowY + (fits - 1) * ROW_H, pal.textMuted());
             rankings = rankings.subList(0, fits - 1);
         }
         for (Ranking r : rankings) {
             GameModes.Mode mode = GameModes.get(r.mode());
             MutableText line = Text.empty().append(ModeTexts.icon(source, r.mode())).append(" ")
                     .append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
-                    .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(0xD0D0D0)));
+                    .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(pal.textDim() & 0xFFFFFF)));
             if (r.hasHigherPeak()) {
                 MutableText withPeak = line.copy()
                         .append(Text.literal(" ↑").formatted(Formatting.DARK_GRAY))
@@ -260,7 +248,7 @@ public class QTiersProfileScreen extends Screen {
                 // Drop the peak rather than overlap the next column on narrow screens
                 if (textRenderer.getWidth(withPeak) <= w - 10) line = withPeak;
             }
-            context.drawTextWithShadow(textRenderer, line, x + 6, rowY, 0xFFFFFFFF);
+            Ui.text(context, line, x + 9, rowY, pal.text());
             rowY += ROW_H;
         }
     }

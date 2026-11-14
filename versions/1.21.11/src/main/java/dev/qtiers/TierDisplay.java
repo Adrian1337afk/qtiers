@@ -63,7 +63,8 @@ public final class TierDisplay {
         if (config.showIcons) {
             text.append(ModeTexts.icon(source, ranking.mode()));
         }
-        text.append(Text.literal(ranking.label()).styled(s -> s.withColor(ranking.color())));
+        String label = config.tierBrackets ? "[" + ranking.label() + "]" : ranking.label();
+        text.append(Text.literal(label).styled(s -> s.withColor(ranking.color()).withBold(config.boldTiers)));
         return text;
     }
 
@@ -77,7 +78,7 @@ public final class TierDisplay {
     }
 
     private static Text separator(int tierColor, QTiersConfig config) {
-        MutableText sep = Text.literal(" | ");
+        MutableText sep = Text.literal(config.separator.isEmpty() ? " " : " " + config.separator + " ");
         return config.coloredSeparator ? sep.styled(s -> s.withColor(tierColor)) : sep.formatted(Formatting.GRAY);
     }
 }

@@ -92,8 +92,8 @@ public class QTiersCompareScreen extends QTiersListScreen {
 
     @Override
     protected void renderHeader(DrawContext context, int x, int y, int width) {
-        drawClipped(context, Text.literal(nameA).formatted(Formatting.BOLD), colA(x, width), y, width / 4 - 4, 0xFFFFFFFF);
-        drawClipped(context, Text.literal(nameB).formatted(Formatting.BOLD), colB(x, width), y, width / 4 - 4, 0xFFFFFFFF);
+        drawClipped(context, Text.literal(nameA).formatted(Formatting.BOLD), colA(x, width), y, width / 4 - 4, textColor());
+        drawClipped(context, Text.literal(nameB).formatted(Formatting.BOLD), colB(x, width), y, width / 4 - 4, textColor());
     }
 
     @Override
@@ -106,19 +106,19 @@ public class QTiersCompareScreen extends QTiersListScreen {
         Row row = rows.get(index);
         if (row.mode() == null) {
             context.fill(x - 2, y - 2, x + width + 2, y + ROW_H - 2, 0x40000000 | (row.source().color & 0xFFFFFF));
-            context.drawTextWithShadow(textRenderer, Text.literal(row.source().displayName)
-                    .styled(s -> s.withColor(row.source().color).withBold(true)), x + 2, y, 0xFFFFFFFF);
-            drawClipped(context, row.note(), colA(x, width), y, width / 2 - 4, 0xFFFFFFFF);
+            Ui.text(context, Text.literal(row.source().displayName)
+                    .styled(s -> s.withColor(row.source().color).withBold(true)), x + 2, y, textColor());
+            drawClipped(context, row.note(), colA(x, width), y, width / 2 - 4, textColor());
             return;
         }
-        drawClipped(context, ModeTexts.styledName(row.source(), row.mode()), x + 8, y, width / 2 - 12, 0xFFFFFFFF);
+        drawClipped(context, ModeTexts.styledName(row.source(), row.mode()), x + 8, y, width / 2 - 12, textColor());
         // Lower score is better; a retired tier never beats an active one
         int a = row.a().map(r -> r.score() + (r.retired() ? 1000 : 0)).orElse(Integer.MAX_VALUE);
         int b = row.b().map(r -> r.score() + (r.retired() ? 1000 : 0)).orElse(Integer.MAX_VALUE);
         // Only mark a winner when both are ranked in this gamemode
         boolean both = row.a().isPresent() && row.b().isPresent();
-        context.drawTextWithShadow(textRenderer, cell(row.a(), both && a < b), colA(x, width), y, 0xFFFFFFFF);
-        context.drawTextWithShadow(textRenderer, cell(row.b(), both && b < a), colB(x, width), y, 0xFFFFFFFF);
+        Ui.text(context, cell(row.a(), both && a < b), colA(x, width), y, textColor());
+        Ui.text(context, cell(row.b(), both && b < a), colB(x, width), y, textColor());
     }
 
     private static Text cell(Optional<Ranking> ranking, boolean better) {

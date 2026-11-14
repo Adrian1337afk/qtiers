@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin {
-    /** How far player nametags are raised above vanilla's spot, in blocks. */
-    private static final double NAMETAG_RAISE = 0.2;
-
     /** Shows your own nametag (with tiers) in third person (F5), like WhoAmI. Vanilla hides it for the camera entity. */
     @ModifyReturnValue(method = "hasLabel(Lnet/minecraft/entity/PlayerLikeEntity;D)Z", at = @At("RETURN"))
     private boolean qtiers$showOwnName(boolean original, PlayerLikeEntity entity, double squaredDistance) {
@@ -32,8 +29,9 @@ public abstract class PlayerEntityRendererMixin {
     @Inject(method = "updateRenderState(Lnet/minecraft/entity/PlayerLikeEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V",
             at = @At("TAIL"))
     private void qtiers$raiseNametag(PlayerLikeEntity entity, PlayerEntityRenderState state, float tickProgress, CallbackInfo ci) {
-        if (state.nameLabelPos != null && QTiersConfig.get().enabled) {
-            state.nameLabelPos = state.nameLabelPos.add(0, NAMETAG_RAISE, 0);
+        QTiersConfig config = QTiersConfig.get();
+        if (state.nameLabelPos != null && config.enabled && config.nametagHeight > 0) {
+            state.nameLabelPos = state.nameLabelPos.add(0, config.nametagHeight, 0);
         }
     }
 }

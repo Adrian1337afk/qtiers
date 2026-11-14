@@ -114,12 +114,12 @@ Set them under Options → Controls → QTiers.
 
    | Minecraft | Jar |
    |---|---|
-   | 1.21.4 | `qtiers-1.6.0+1.21.4.jar` |
-   | 1.21.6 – 1.21.8 | `qtiers-1.6.0+1.21.8.jar` |
-   | 1.21.11 | `qtiers-1.6.0+1.21.11.jar` |
-   | 26.1 – 26.1.2 | `qtiers-1.6.0+26.1.jar` |
-   | 26.2 | `qtiers-1.6.0+26.2.jar` |
-   | 26.3 | `qtiers-1.6.0+26.3.jar` |
+   | 1.21.4 | `qtiers-1.6.1+1.21.4.jar` |
+   | 1.21.6 – 1.21.8 | `qtiers-1.6.1+1.21.8.jar` |
+   | 1.21.11 | `qtiers-1.6.1+1.21.11.jar` |
+   | 26.1 – 26.1.2 | `qtiers-1.6.1+26.1.jar` |
+   | 26.2 | `qtiers-1.6.1+26.2.jar` |
+   | 26.3 | `qtiers-1.6.1+26.3.jar` |
 
 3. Put it and [Fabric API](https://modrinth.com/mod/fabric-api) in `.minecraft/mods`.
 4. Optional: add [Mod Menu](https://modrinth.com/mod/modmenu) to open the settings from the mod list.
