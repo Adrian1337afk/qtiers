@@ -61,7 +61,7 @@ public final class QTiersConfig {
     // Theme
     public UiStyle uiStyle = UiStyle.DARK;
     /** Accent color (RGB) for switches, sliders and highlights. */
-    public int accentColor = 0x4F8CFF;
+    public int accentColor = 0xC8FF3D;
     /** Corner roundness of panels, buttons and the opponent HUD, 0 = square. */
     public int cornerRadius = 4;
 
@@ -123,6 +123,7 @@ public final class QTiersConfig {
         if (uiStyle == null) uiStyle = UiStyle.DARK;
         if (separator == null || !SEPARATORS.contains(separator)) separator = "|";
         accentColor &= 0xFFFFFF;
+        if (accentColor == 0x4F8CFF) accentColor = 0xC8FF3D; // 1.6.1 saved its old blue default into every config
         hudBackground &= 0xFFFFFF;
         cornerRadius = Math.max(0, Math.min(6, cornerRadius));
         hudOpacity = Math.max(0, Math.min(100, hudOpacity));

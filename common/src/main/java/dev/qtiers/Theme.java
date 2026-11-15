@@ -8,8 +8,8 @@ public final class Theme {
                           int text, int textDim, int textMuted) {}
 
     private static final Palette DARK = new Palette(
-            0xF2141519, 0xF20E0F12, 0xFF1C1E23, 0xFF24272D, 0xFF2C2F36, 0xFF34373F,
-            0xFFF2F3F5, 0xFFA3A7B0, 0xFF6B7079);
+            0xF20B0B0C, 0xF2070708, 0xFF141416, 0xFF1B1B1E, 0xFF27272C, 0xFF303035,
+            0xFFECEBE6, 0xFFA3A29C, 0xFF6B6A66);
     private static final Palette MIDNIGHT = new Palette(
             0xF20A0E19, 0xF2070A12, 0xFF121828, 0xFF182034, 0xFF222B40, 0xFF2A3550,
             0xFFE8ECF5, 0xFF9AA3B8, 0xFF5E6880);
@@ -19,8 +19,8 @@ public final class Theme {
 
     /** Accent presets offered in the settings. */
     public static final int[] ACCENTS = {
-            0x4F8CFF, 0x8B5CF6, 0xEC4899, 0xEF4444, 0xF97316,
-            0xE8BA3A, 0x22C55E, 0x14B8A6, 0x06B6D4, 0xE5E7EB};
+            0xC8FF3D, 0x4F8CFF, 0x8B5CF6, 0xEC4899, 0xEF4444, 0xF97316,
+            0xE8BA3A, 0x14B8A6, 0x06B6D4, 0xE5E7EB};
 
     /** Background presets for the opponent HUD. */
     public static final int[] HUD_BACKGROUNDS = {
