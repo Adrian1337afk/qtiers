@@ -98,7 +98,7 @@ public class QTiersProfileScreen extends Screen {
             return;
         }
         MinecraftClient client = MinecraftClient.getInstance();
-        TierApi.fetchBytes(SKIN_RENDERERS.get(rendererIndex).formatted(playerId)).whenComplete((bytes, err) -> {
+        TierApi.fetchBytes(SKIN_RENDERERS.get(rendererIndex).formatted(java.net.URLEncoder.encode(playerId, java.nio.charset.StandardCharsets.UTF_8))).whenComplete((bytes, err) -> {
             if (err != null) {
                 loadSkin(rendererIndex + 1);
                 return;
@@ -134,7 +134,7 @@ public class QTiersProfileScreen extends Screen {
             startX = minX;
         }
         addDrawableChild(Ui.button(startX, y, buttonW, 20, "NameMC",
-                b -> ConfirmLinkScreen.open(this, "https://namemc.com/profile/" + playerId, true)));
+                b -> ConfirmLinkScreen.open(this, "https://namemc.com/profile/" + java.net.URLEncoder.encode(playerId, java.nio.charset.StandardCharsets.UTF_8), true)));
         addDrawableChild(Ui.primary(startX + buttonW + 4, y, buttonW, 20, Text.translatable("gui.done"), b -> close()));
         addDrawableChild(Ui.button(startX + 2 * (buttonW + 4), y, buttonW, 20, "Settings",
                 b -> client.setScreen(new QTiersConfigScreen(this))));
