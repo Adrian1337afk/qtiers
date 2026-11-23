@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Servers like mcpvp.club hide the vanilla nametag and show the name with a text display riding
- * the player. This adds the player's tiers to that text, re-splitting the lines when they change.
+ * Servers like mcpvp.club hide the vanilla nametag and show the name with a text display (riding or following
+ * the player). This adds the player's tiers to that text, re-splitting the lines when they change.
  */
 @Mixin(DisplayEntity.TextDisplayEntity.class)
 public abstract class TextDisplayEntityMixin {
@@ -32,7 +32,7 @@ public abstract class TextDisplayEntityMixin {
                                                CallbackInfoReturnable<DisplayEntity.TextDisplayEntity.TextLines> cir) {
         DisplayEntity.TextDisplayEntity.Data data = getData();
         if (data == null) return;
-        String shown = ServerNames.decorateTextDisplay((DisplayEntity.TextDisplayEntity) (Object) this, data.text()).getString();
+        String shown = ServerNames.decorateTextDisplay(data.text()).getString();
         if (!shown.equals(qtiers$shown)) {
             qtiers$shown = shown;
             textLines = null;
@@ -43,6 +43,6 @@ public abstract class TextDisplayEntityMixin {
             target = "Lnet/minecraft/entity/decoration/DisplayEntity$TextDisplayEntity$LineSplitter;split(Lnet/minecraft/text/Text;I)Lnet/minecraft/entity/decoration/DisplayEntity$TextDisplayEntity$TextLines;"),
             index = 0)
     private Text qtiers$addTiers(Text text) {
-        return ServerNames.decorateTextDisplay((DisplayEntity.TextDisplayEntity) (Object) this, text);
+        return ServerNames.decorateTextDisplay(text);
     }
 }

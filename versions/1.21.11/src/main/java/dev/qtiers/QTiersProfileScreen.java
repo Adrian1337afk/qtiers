@@ -12,7 +12,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -35,7 +34,6 @@ public class QTiersProfileScreen extends Screen {
             "https://visage.surgeplay.com/full/384/%s",
             "https://mc-heads.net/body/%s/256");
     private static final AtomicInteger TEXTURE_COUNTER = new AtomicInteger();
-    private static final int ROW_H = 11;
     private static final int SEARCH_W = 110;
 
     private enum SkinState { LOADING, LOADED, FAILED }
@@ -159,26 +157,24 @@ public class QTiersProfileScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        Theme.Palette pal = Theme.palette();
         Ui.window(context, 4, 4, width - 8, height - 8, Text.literal(displayName));
         Ui.searchBox(context, search, 12, height - 32, SEARCH_W);
         super.render(context, mouseX, mouseY, deltaTicks);
 
-        int top = 32;
+        // Like the Tiers mod: skin on top in the middle, the sites side by side below it
+        int top = 26;
         int bottom = height - 40;
-        int skinPanel = Math.max(90, width / 4);
-        Ui.rect(context, 12, top - 2, skinPanel - 14, bottom - top + 2, Theme.radius(), pal.card());
-        renderSkin(context, 12, top + 4, skinPanel - 14, bottom - top - 8);
+        int skinH = Math.max(40, (bottom - top) / 4);
+        renderSkin(context, width / 2 - skinH / 2, top, skinH, skinH);
 
-        // Sites in a grid (4 sites = 2x2, 5+ = 3 columns), each panel getting an equal share of the height
         TierSource[] sources = TierSource.values();
-        int gridX = skinPanel + 10;
-        int cols = sources.length > 4 ? 3 : 2;
+        int cols = Math.min(3, sources.length);
         int rows = (sources.length + cols - 1) / cols;
-        int cellW = (width - gridX - 12) / cols;
-        int cellH = (bottom - top) / rows;
+        int gridY = top + skinH + 6;
+        int cellW = (width - 24) / cols;
+        int cellH = (bottom - gridY) / rows;
         for (int i = 0; i < sources.length; i++) {
-            renderPanel(context, sources[i], gridX + (i % cols) * cellW, top + (i / cols) * cellH, cellW, cellH - 4);
+            renderPanel(context, sources[i], 12 + (i % cols) * cellW, gridY + (i / cols) * cellH, cellW, cellH - 4, mouseX, mouseY);
         }
     }
 
@@ -197,60 +193,84 @@ public class QTiersProfileScreen extends Screen {
         }
     }
 
-    /** One site's panel: header, stats line, then as many rankings as fit in {@code h}. */
-    private void renderPanel(DrawContext context, TierSource source, int x, int y, int w, int h) {
+    /** One site: name, summary line, then a grid of mode icons with the tier (and higher peak) under each. */
+    private void renderPanel(DrawContext context, TierSource source, int x, int y, int w, int h, int mouseX, int mouseY) {
         Theme.Palette pal = Theme.palette();
-        Ui.rect(context, x + 2, y - 2, w - 4, h + 2, Theme.radius(), pal.card());
-        Ui.rect(context, x + 2, y - 2, w - 4, 24, Theme.radius(), Theme.alpha(source.color, 0x30));
-        Ui.rect(context, x + 2, y + 2, 3, 16, 1, 0xFF000000 | source.color);
-        Ui.text(context, Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), x + 9, y + 1, pal.text());
+        int cx = x + w / 2;
+        Ui.rect(context, x + 2, y, w - 4, h, Theme.radius(), pal.card());
+        Ui.centered(context, Text.literal(source.displayName).styled(s -> s.withColor(source.color).withBold(true)), cx, y + 4, pal.text());
 
-        if (failedSites.contains(source)) {
-            Ui.text(context, Text.literal("Couldn't load"), x + 9, y + 12, 0xFFEF4444);
-            return;
-        }
+        Text status = null;
+        int statusColor = pal.textMuted();
         Optional<TierProfile> profile = profiles.get(source);
-        if (profile == null) {
-            Ui.text(context, Text.literal("Loading..."), x + 9, y + 12, pal.textDim());
+        if (failedSites.contains(source)) {
+            status = Text.literal("Couldn't load");
+            statusColor = 0xFFEF4444;
+        } else if (profile == null) {
+            status = Text.literal("Loading...");
+            statusColor = pal.textDim();
+        } else if (profile.isEmpty() || !profile.get().isRanked()) {
+            status = Text.literal("Not ranked");
+        }
+        if (status != null) {
+            Ui.centered(context, status, cx, y + 16, statusColor);
             return;
         }
-        if (profile.isEmpty() || !profile.get().isRanked()) {
-            Ui.text(context, Text.literal("Not ranked"), x + 9, y + 12, pal.textMuted());
-            return;
-        }
+
         TierProfile p = profile.get();
         String stats = p.summary();
-        // Narrow panels (3 columns): drop trailing parts like the points total rather than overflow
+        // Narrow panels: drop trailing parts like the points total rather than overflow
         while (textRenderer.getWidth(stats) > w - 10 && stats.contains(" · ")) stats = stats.substring(0, stats.lastIndexOf(" · "));
-        // Region is the least important part; drop it rather than run into the next panel
         if (!p.region().isEmpty() && textRenderer.getWidth(stats + " · " + p.region()) <= w - 10) stats += " · " + p.region();
-        Ui.text(context, Text.literal(stats), x + 9, y + 12, pal.textDim());
+        Ui.centered(context, Text.literal(stats), cx, y + 16, pal.textDim());
 
-        int rowY = y + 28;
         List<Ranking> rankings = p.rankings().values().stream().sorted(Comparator.comparingInt(Ranking::score)).toList();
-        int fits = Math.max(1, (y + h - rowY) / ROW_H);
-        if (rankings.size() > fits) {
-            // Keep the best ones and say how many are hidden
-            Ui.text(context, Text.literal("+" + (rankings.size() - fits + 1) + " more"),
-                    x + 9, rowY + (fits - 1) * ROW_H, pal.textMuted());
-            rankings = rankings.subList(0, fits - 1);
+        int slotW = 24;
+        int perRow = Math.max(1, Math.min(rankings.size(), (w - 8) / slotW));
+        int gridTop = y + 28;
+        int rowsNeeded = (rankings.size() + perRow - 1) / perRow;
+        // Big icons only when every ranking still fits with them
+        int iconScale = rowsNeeded * 28 <= y + h - gridTop ? 2 : 1;
+        int slotH = 9 * iconScale + 10;
+        int slots = perRow * Math.max(1, (y + h - gridTop) / slotH);
+        int hidden = 0;
+        if (rankings.size() > slots) {
+            // Keep the best; the last slot says how many are left out
+            hidden = rankings.size() - (slots - 1);
+            rankings = rankings.subList(0, slots - 1);
         }
-        for (Ranking r : rankings) {
-            GameModes.Mode mode = GameModes.get(r.mode());
-            MutableText line = Text.empty().append(ModeTexts.icon(source, r.mode())).append(" ")
-                    .append(Text.literal(r.label()).styled(s -> s.withColor(r.color())))
-                    .append(Text.literal(" " + mode.title()).styled(s -> s.withColor(pal.textDim() & 0xFFFFFF)));
-            if (r.hasHigherPeak()) {
-                MutableText withPeak = line.copy()
-                        .append(Text.literal(" ↑").formatted(Formatting.DARK_GRAY))
-                        .append(Text.literal(Ranking.tierLabel(r.peakTier(), r.peakPos()))
-                                .styled(s -> s.withColor(Ranking.tierColor(r.peakTier(), r.peakPos()))));
-                // Drop the peak rather than overlap the next column on narrow screens
-                if (textRenderer.getWidth(withPeak) <= w - 10) line = withPeak;
+        int total = rankings.size() + (hidden > 0 ? 1 : 0);
+
+        Text hovered = null;
+        for (int i = 0; i < total; i++) {
+            int rowCount = Math.min(perRow, total - (i / perRow) * perRow);
+            int sx = cx - rowCount * slotW / 2 + (i % perRow) * slotW;
+            int sy = gridTop + (i / perRow) * slotH;
+            int scx = sx + slotW / 2;
+            int labelY = sy + 9 * iconScale + 1;
+            if (i == rankings.size()) {
+                Ui.centered(context, Text.literal("+" + hidden), scx, labelY, pal.textMuted());
+                break;
             }
-            Ui.text(context, line, x + 9, rowY, pal.text());
-            rowY += ROW_H;
+            Ranking r = rankings.get(i);
+
+            Text icon = ModeTexts.icon(source, r.mode());
+            context.getMatrices().pushMatrix();
+            context.getMatrices().translate(scx - textRenderer.getWidth(icon) * iconScale / 2f, sy);
+            context.getMatrices().scale(iconScale, iconScale);
+            context.drawText(textRenderer, icon, 0, 0, 0xFFFFFFFF, false);
+            context.getMatrices().popMatrix();
+
+            Text label = Text.literal(r.label()).styled(s -> s.withColor(r.color()));
+            // A higher peak gets an arrow here and the full peak in the tooltip
+            if (r.hasHigherPeak()) label = label.copy().append(Text.literal("↑").formatted(Formatting.DARK_GRAY));
+            Ui.centered(context, label, scx, labelY, pal.text());
+            if (mouseX >= sx && mouseX < sx + slotW && mouseY >= sy && mouseY < sy + slotH) {
+                hovered = Text.literal(GameModes.get(r.mode()).title() + (r.hasHigherPeak()
+                        ? " · peak " + Ranking.tierLabel(r.peakTier(), r.peakPos()) : ""));
+            }
         }
+        if (hovered != null) context.drawTooltip(textRenderer, hovered, mouseX, mouseY);
     }
 
     /** Not removed(): that also fires when NameMC confirm / Settings open on top of this screen. */

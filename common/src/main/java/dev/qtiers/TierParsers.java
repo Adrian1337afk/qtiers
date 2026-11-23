@@ -71,6 +71,7 @@ final class TierParsers {
                 int[] code = Ranking.parseCode(strOr(r, "tier", null));
                 String mode = strOr(r, "gametype", null);
                 if (code == null || mode == null) continue;
+                if (mode.equals("ht_cart")) mode = "cart"; // PVPHQ renamed its cart gametype
                 // Inactive players keep their tier on PVPHQ; show it like a retired tier
                 rankings.put(mode, new Ranking(mode, code[0], code[1], code[0], code[1], boolOr(r, "inactive")));
             }

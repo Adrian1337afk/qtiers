@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.2 (2026-11-23)
+
+### Changed
+- **Profile screen (1.21.11):** new layout like the Tiers mod. Skin on top in the middle, the tier lists side by side below it, and each gamemode as an icon with the tier under it. Hover an icon for the gamemode name and peak; a tier below its peak gets a `↑`. When a list doesn't fit, the best tiers are shown with a `+N` for the rest.
+- **Server nametags (all versions):** nametags that servers draw with text displays now get tiers even when the display isn't riding the player, matching any player name in the text (like the Tiers mod).
+- **Green theme (1.21.11):** the default accent is lime like qdran.de, and the Dark style uses the site's colors.
+
+### Fixed
+- PVPHQ Cart tiers show again with their icon. PVPHQ renamed the gamemode to `ht_cart`.
+
 ## 1.6.1 (2026-11-14)
 
 ### Added

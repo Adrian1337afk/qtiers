@@ -2,8 +2,6 @@ package dev.qtiers;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.HashMap;
@@ -14,7 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * Support for servers that draw their own names instead of vanilla's (e.g. mcpvp.club):
- * nametags made of text displays riding the player, and tab lists made of fake entries
+ * nametags made of text displays, and tab lists made of fake entries
  * whose text contains the real player's name.
  */
 public final class ServerNames {
@@ -26,13 +24,15 @@ public final class ServerNames {
 
     private ServerNames() {}
 
-    /** A text display riding a player whose text contains that player's name gets their tiers. */
-    public static Text decorateTextDisplay(Entity display, Text text) {
+    /**
+     * Any text display whose text contains a known player's name gets that player's tiers, like the
+     * Tiers mod. Riding is not required: some servers move the nametag display with the player instead.
+     */
+    public static Text decorateTextDisplay(Text text) {
         QTiersConfig config = QTiersConfig.get();
         if (text == null || !config.enabled || !config.showInNametags) return text;
-        if (!(display.getVehicle() instanceof PlayerEntity player)) return text;
-        if (!containsWord(text.getString(), player.getGameProfile().name())) return text;
-        return TierDisplay.decorate(player.getUuid(), text);
+        UUID id = playerIn(text.getString());
+        return id == null ? text : TierDisplay.decorate(id, text);
     }
 
     /**
@@ -43,8 +43,13 @@ public final class ServerNames {
         if (isRealPlayer(entry)) return entry.getProfile().id();
         Text display = entry.getDisplayName();
         if (display == null) return null;
+        return playerIn(display.getString());
+    }
+
+    /** The first known player whose name appears as a word in the text, or null. */
+    private static UUID playerIn(String text) {
         Map<String, UUID> names = names();
-        for (String word : NOT_NAME_CHAR.split(display.getString())) {
+        for (String word : NOT_NAME_CHAR.split(text)) {
             UUID id = names.get(word.toLowerCase(Locale.ROOT));
             if (id != null) return id;
         }
@@ -74,10 +79,4 @@ public final class ServerNames {
         return namesToIds;
     }
 
-    private static boolean containsWord(String text, String name) {
-        for (String word : NOT_NAME_CHAR.split(text)) {
-            if (word.equalsIgnoreCase(name)) return true;
-        }
-        return false;
-    }
 }
